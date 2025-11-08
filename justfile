@@ -361,10 +361,10 @@ release-preview version="":
 
 copy-example:
     rsync ~/.claude/projects/-Users-dain-workspace-claude-code-log/combined_transcripts.html ./docs/claude-code-log-transcript.html
-    rsync -r ~/.claude/projects/-Users-dain-workspace-claude-code-log/cache ./docs/
+    rsync -a ~/.claude/projects/-Users-dain-workspace-claude-code-log/cache ./docs/
 
 backup:
-    rsync -r ~/.claude/projects ~/.claude-backup/projects
+    rsync -a ~/.claude/projects ~/.claude-backup/projects
 
 clear-cache:
     just cli --clear-cache
