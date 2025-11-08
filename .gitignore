@@ -184,3 +184,7 @@ test/test_data/*.html
 .claude/settings.local.json
 .vscode/settings.json
 local.ps1
+
+# Generated documentation examples (uploaded to GitHub releases instead)
+docs/claude-code-log-transcript.html
+docs/cache/

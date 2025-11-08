@@ -300,10 +300,16 @@ github-release version="":
             echo "📦 Uploading source distribution"
             gh release upload "$TARGET_TAG" "dist/claude_code_log-${TARGET_TAG#v}.tar.gz" --clobber
         fi
-        
+
         if [[ -f "dist/claude_code_log-${TARGET_TAG#v}-py3-none-any.whl" ]]; then
             echo "📦 Uploading wheel distribution"
             gh release upload "$TARGET_TAG" "dist/claude_code_log-${TARGET_TAG#v}-py3-none-any.whl" --clobber
+        fi
+
+        # Upload example HTML file if it exists
+        if [[ -f "docs/claude-code-log-transcript.html" ]]; then
+            echo "📄 Uploading example HTML transcript"
+            gh release upload "$TARGET_TAG" "docs/claude-code-log-transcript.html" --clobber
         fi
     fi
     

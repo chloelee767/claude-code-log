@@ -6,6 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [0.8.0] - 2025-11-08
+
+### Changed
+
+- **Regenerate HTML files + couple tiny changes**
+- **Use Pygments to render files and code snippets (#39)**
+- **Fix Unicode escape in tool use content rendering (#38)**
+- **Introduce visual structure for the conversation and some specialized tool rendering (#37)**
+
+
 ## [0.7.0] - 2025-10-22
 
 ### Changed
