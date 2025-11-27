@@ -197,6 +197,7 @@ class BaseTranscriptEntry(BaseModel):
     uuid: str
     timestamp: str
     isMeta: Optional[bool] = None
+    raw_json: Optional[str] = None  # Store original JSON for copy functionality
 
 
 class UserTranscriptEntry(BaseTranscriptEntry):
@@ -217,6 +218,7 @@ class SummaryTranscriptEntry(BaseModel):
     summary: str
     leafUuid: str
     cwd: Optional[str] = None
+    raw_json: Optional[str] = None  # Store original JSON for copy functionality
 
 
 class SystemTranscriptEntry(BaseTranscriptEntry):
@@ -245,6 +247,7 @@ class QueueOperationTranscriptEntry(BaseModel):
     content: Optional[Union[List[ContentItem], str]] = (
         None  # List for enqueue, str for remove/popAll
     )
+    raw_json: Optional[str] = None  # Store original JSON for copy functionality
 
 
 TranscriptEntry = Union[

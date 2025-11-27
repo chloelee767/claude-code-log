@@ -1642,6 +1642,7 @@ class TemplateMessage:
         has_children: bool = False,
         uuid: Optional[str] = None,
         parent_uuid: Optional[str] = None,
+        raw_json: Optional[str] = None,
     ):
         self.type = message_type
         self.content_html = content_html
@@ -1665,6 +1666,7 @@ class TemplateMessage:
         self.has_markdown = has_markdown
         self.uuid = uuid
         self.parent_uuid = parent_uuid
+        self.raw_json = raw_json  # Store original JSON for copy functionality
         # Fold/unfold counts
         self.immediate_children_count = 0  # Direct children only
         self.total_descendants_count = 0  # All descendants recursively
@@ -2971,6 +2973,7 @@ def _process_messages_loop(
                 ancestry=ancestry,
                 uuid=message.uuid,  # Store UUID for pairing
                 parent_uuid=parent_uuid,  # Store parent UUID for pairing
+                raw_json=getattr(message, "raw_json", None),  # Store raw JSON
             )
             template_messages.append(system_template_message)
             continue
@@ -3096,6 +3099,7 @@ def _process_messages_loop(
                     is_session_header=True,
                     message_id=session_message_id,
                     ancestry=[],  # Session headers are top-level
+                    raw_json=None,  # Session headers don't have raw JSON
                 )
                 template_messages.append(session_header)
 
@@ -3246,6 +3250,7 @@ def _process_messages_loop(
                 message_title=message_title,
                 message_id=msg_id,
                 ancestry=ancestry,
+                raw_json=getattr(message, "raw_json", None),  # Store raw JSON
             )
             template_messages.append(template_message)
 
@@ -3480,6 +3485,7 @@ def _process_messages_loop(
                 message_title=tool_message_title,
                 message_id=tool_msg_id,
                 ancestry=tool_ancestry,
+                raw_json=getattr(message, "raw_json", None),  # Store raw JSON from parent message
             )
             template_messages.append(tool_template_message)
 

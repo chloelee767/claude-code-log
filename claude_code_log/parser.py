@@ -198,6 +198,9 @@ def load_transcript(
                         "system",
                         "queue-operation",
                     ]:
+                        # Store the raw JSON for copy functionality
+                        entry_dict["raw_json"] = json.dumps(entry_dict, indent=2)
+                        
                         # Parse using Pydantic models
                         entry = parse_transcript_entry(entry_dict)
                         messages.append(entry)
