@@ -102,7 +102,7 @@
     </div>
     {% else %}
     {% set markdown = message.css_class in ['assistant', 'thinking', 'sidechain'] or (message.css_class and 'compacted' in message.css_class) %}
-    <div class='message {{ message.css_class }}{% if message.is_paired %} paired-message {{ message.pair_role }}{% endif %}{% for ancestor_id in message.ancestry %} {{ ancestor_id }}{% endfor %}' data-message-id='{{ message.message_id }}' id='msg-{{ message.message_id }}{% if message.is_paired and message.pair_role %}-{{ message.pair_role.replace("pair_", "") }}{% endif %}'>
+    <div class='message {{ message.css_class }}{% if message.is_paired %} paired-message {{ message.pair_role }}{% endif %}{% for ancestor_id in message.ancestry %} {{ ancestor_id }}{% endfor %}' data-message-id='{{ message.message_id }}' id='msg-{{ message.message_id }}{% if message.is_paired and message.pair_role %}-{{ message.pair_role.replace("pair_", "") }}{% endif %}'{% if message.raw_json %} data-raw-json='{{ message.raw_json | replace("'", "&apos;") }}'{% endif %}>
         <div class='header'>
             <span{% if message.title_hint %} title="{{ message.title_hint }}"{% endif %}>{% if message.message_title %}{%
                 if message.message_title == 'Memory' %}💭 {%
@@ -117,6 +117,9 @@
             <div class='header-info'>
                 <div class='timestamp-row'>
                     <span class='timestamp'{% if message.raw_timestamp %} data-timestamp='{{ message.raw_timestamp }}'{% if message.pair_duration %} data-duration='{{ message.pair_duration }}'{% endif %}{% endif %}>{{ message.formatted_timestamp }}</span>
+                    {% if message.raw_json %}
+                    <button class='copy-json-btn' data-message-id='{{ message.message_id }}' title='Copy original JSON'>📋</button>
+                    {% endif %}
                 </div>
                 {% if message.token_usage %}
                 <span class='token-usage'>{{ message.token_usage }}</span>
@@ -164,6 +167,62 @@
             const selectNoneButton = document.getElementById('selectNone');
             const closeToolbarButton = document.getElementById('closeToolbar');
             const filterToggles = document.querySelectorAll('.filter-toggle');
+
+            // Copy JSON functionality
+            function copyJsonToClipboard(button) {
+                const messageId = button.getAttribute('data-message-id');
+                const messageDiv = document.getElementById('msg-' + messageId) || 
+                                   document.getElementById('msg-' + messageId + '-first') ||
+                                   document.getElementById('msg-' + messageId + '-last');
+                
+                if (!messageDiv) {
+                    console.error('Message div not found for ID:', messageId);
+                    return;
+                }
+                
+                const rawJson = messageDiv.getAttribute('data-raw-json');
+                if (!rawJson) {
+                    console.error('No raw JSON found for message:', messageId);
+                    return;
+                }
+                
+                // Decode HTML entities - handle both &quot; and &#34;
+                const textarea = document.createElement('textarea');
+                textarea.innerHTML = rawJson;
+                const decodedJson = textarea.value;
+                
+                // Copy to clipboard
+                navigator.clipboard.writeText(decodedJson).then(function() {
+                    // Visual feedback
+                    const originalText = button.textContent;
+                    button.textContent = '✓';
+                    button.style.color = '#4caf50';
+                    
+                    setTimeout(function() {
+                        button.textContent = originalText;
+                        button.style.color = '';
+                    }, 2000);
+                }).catch(function(err) {
+                    console.error('Failed to copy:', err);
+                    // Fallback feedback
+                    const originalText = button.textContent;
+                    button.textContent = '✗';
+                    button.style.color = '#f44336';
+                    
+                    setTimeout(function() {
+                        button.textContent = originalText;
+                        button.style.color = '';
+                    }, 2000);
+                });
+            }
+
+            // Attach copy button event listeners
+            document.querySelectorAll('.copy-json-btn').forEach(function(button) {
+                button.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    copyJsonToClipboard(button);
+                });
+            });
 
             // Timezone conversion (included as component)
             {% include 'components/timezone_converter.js' %}

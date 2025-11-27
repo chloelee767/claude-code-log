@@ -249,7 +249,31 @@
 .timestamp-row {
     display: flex;
     flex-direction: row;
-    align-items: normal;
+    align-items: center;
+    gap: 0.5em;
+}
+
+/* Copy JSON button styling */
+.copy-json-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1em;
+    padding: 0.2em 0.4em;
+    border-radius: 3px;
+    transition: all 0.2s ease;
+    opacity: 0.5;
+}
+
+.copy-json-btn:hover {
+    opacity: 1;
+    background-color: var(--highlight-dimmed);
+    transform: scale(1.1);
+}
+
+.copy-json-btn:active {
+    transform: scale(0.95);
+}
     gap: 8px;
 }
 

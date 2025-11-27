@@ -1831,6 +1831,7 @@ class TemplateMessage:
         uuid: Optional[str] = None,
         parent_uuid: Optional[str] = None,
         agent_id: Optional[str] = None,
+        raw_json: Optional[str] = None,
     ):
         self.type = message_type
         self.content_html = content_html
@@ -1855,6 +1856,7 @@ class TemplateMessage:
         self.uuid = uuid
         self.parent_uuid = parent_uuid
         self.agent_id = agent_id  # Agent ID for sidechain messages and Task results
+        self.raw_json = raw_json  # Store original JSON for copy functionality
         # Raw text content for deduplication (sidechain assistants vs Task results)
         self.raw_text_content: Optional[str] = None
         # Fold/unfold counts
@@ -3410,6 +3412,7 @@ def _process_messages_loop(
                 ancestry=[],  # Will be assigned by _build_message_hierarchy
                 uuid=message.uuid,
                 parent_uuid=parent_uuid,
+                raw_json=getattr(message, "raw_json", None),  # Store raw JSON
             )
             template_messages.append(system_template_message)
             continue
@@ -3546,6 +3549,7 @@ def _process_messages_loop(
                     is_session_header=True,
                     message_id=None,  # Will be assigned by _build_message_hierarchy
                     ancestry=[],  # Session headers are top-level
+                    raw_json=None,  # Session headers don't have raw JSON
                 )
                 template_messages.append(session_header)
 
@@ -3689,6 +3693,7 @@ def _process_messages_loop(
                 ancestry=[],  # Will be assigned by _build_message_hierarchy
                 agent_id=getattr(message, "agentId", None),
                 uuid=getattr(message, "uuid", None),
+                raw_json=getattr(message, "raw_json", None),  # Store raw JSON
             )
 
             # Store raw text content for potential future use (e.g., deduplication,
@@ -3909,6 +3914,9 @@ def _process_messages_loop(
                 ancestry=[],  # Will be assigned by _build_message_hierarchy
                 agent_id=getattr(message, "agentId", None),
                 uuid=tool_uuid,
+                raw_json=getattr(
+                    message, "raw_json", None
+                ),  # Store raw JSON from parent message
             )
 
             # Store raw text for Task result deduplication
