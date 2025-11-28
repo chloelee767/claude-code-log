@@ -276,6 +276,76 @@ def render_markdown(text: str) -> str:
         return str(renderer(text))
 
 
+def _strip_ansi_codes(text: str) -> str:
+    """Strip ANSI color codes from text."""
+    ansi_escape = re.compile(r"\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])")
+    return ansi_escape.sub("", text)
+
+
+def extract_copyable_text(
+    content: List[ContentItem],
+    message_type: str,
+    original_message: Optional[TranscriptEntry] = None,
+) -> str:
+    """Extract plain/markdown text suitable for clipboard copying.
+
+    Args:
+        content: List of content items from the message
+        message_type: Type of message (user, assistant, tool_use, tool_result, etc.)
+        original_message: Original transcript entry for additional context
+
+    Returns:
+        Text suitable for copying to clipboard
+    """
+    parts: List[str] = []
+
+    for item in content:
+        item_type = getattr(item, "type", None)
+
+        if isinstance(item, TextContent):
+            # Text content: return original markdown/text
+            parts.append(item.text)
+
+        elif isinstance(item, ToolUseContent):
+            # Tool use: JSON format with tool name and input
+            tool_data = {
+                "name": item.name,
+                "input": item.input,
+            }
+            parts.append(json.dumps(tool_data, indent=2))
+
+        elif isinstance(item, ToolResultContent):
+            # Tool result: raw content (strip ANSI codes)
+            # content can be either a string or a list of dicts
+            if isinstance(item.content, str):
+                parts.append(_strip_ansi_codes(item.content))
+            elif isinstance(item.content, list):
+                # For list content, extract text from each item
+                for content_item in item.content:
+                    if isinstance(content_item, dict) and "text" in content_item:
+                        parts.append(_strip_ansi_codes(content_item["text"]))
+                    else:
+                        parts.append(json.dumps(content_item, indent=2))
+            elif item.content:
+                # Fallback: convert to string
+                parts.append(_strip_ansi_codes(str(item.content)))
+
+        elif isinstance(item, ThinkingContent):
+            # Thinking: original markdown
+            parts.append(item.thinking)
+
+        elif isinstance(item, ImageContent):
+            # Images: skip (as requested)
+            pass
+
+        else:
+            # Unknown type: try to extract text if available
+            if hasattr(item, "text"):
+                parts.append(str(item.text))
+
+    return "\n\n".join(parts)
+
+
 def extract_command_info(text_content: str) -> tuple[str, str, str]:
     """Extract command info from system message with command tags."""
     import re
@@ -1643,6 +1713,7 @@ class TemplateMessage:
         uuid: Optional[str] = None,
         parent_uuid: Optional[str] = None,
         raw_json: Optional[str] = None,
+        copyable_text: Optional[str] = None,
     ):
         self.type = message_type
         self.content_html = content_html
@@ -1667,6 +1738,7 @@ class TemplateMessage:
         self.uuid = uuid
         self.parent_uuid = parent_uuid
         self.raw_json = raw_json  # Store original JSON for copy functionality
+        self.copyable_text = copyable_text  # Store extracted text for clipboard
         # Fold/unfold counts
         self.immediate_children_count = 0  # Direct children only
         self.total_descendants_count = 0  # All descendants recursively
@@ -2961,6 +3033,14 @@ def _process_messages_loop(
             # Track this message's UUID for potential children
             uuid_to_msg_id[message.uuid] = msg_id
 
+            # Extract copyable text from system message (strip ANSI codes)
+            content_str = (
+                message.content
+                if isinstance(message.content, str)
+                else str(message.content)
+            )
+            system_copyable_text = _strip_ansi_codes(content_str)
+
             system_template_message = TemplateMessage(
                 message_type="system",
                 content_html=content_html,
@@ -2974,6 +3054,7 @@ def _process_messages_loop(
                 uuid=message.uuid,  # Store UUID for pairing
                 parent_uuid=parent_uuid,  # Store parent UUID for pairing
                 raw_json=getattr(message, "raw_json", None),  # Store raw JSON
+                copyable_text=system_copyable_text,  # Store extracted text for clipboard
             )
             template_messages.append(system_template_message)
             continue
@@ -3238,6 +3319,11 @@ def _process_messages_loop(
                 hierarchy_stack, current_level, message_id_counter
             )
 
+            # Extract copyable text from the main message content
+            copyable_text = extract_copyable_text(
+                text_only_content, message_type, message
+            )
+
             template_message = TemplateMessage(
                 message_type=message_type,
                 content_html=content_html,
@@ -3251,6 +3337,7 @@ def _process_messages_loop(
                 message_id=msg_id,
                 ancestry=ancestry,
                 raw_json=getattr(message, "raw_json", None),  # Store raw JSON
+                copyable_text=copyable_text,  # Store extracted text for clipboard
             )
             template_messages.append(template_message)
 
@@ -3472,6 +3559,11 @@ def _process_messages_loop(
                 hierarchy_stack, tool_level, message_id_counter
             )
 
+            # Extract copyable text from the tool item
+            tool_copyable_text = extract_copyable_text(
+                [tool_item], tool_message_type, message
+            )
+
             tool_template_message = TemplateMessage(
                 message_type=tool_message_type,
                 content_html=tool_content_html,
@@ -3485,7 +3577,10 @@ def _process_messages_loop(
                 message_title=tool_message_title,
                 message_id=tool_msg_id,
                 ancestry=tool_ancestry,
-                raw_json=getattr(message, "raw_json", None),  # Store raw JSON from parent message
+                raw_json=getattr(
+                    message, "raw_json", None
+                ),  # Store raw JSON from parent message
+                copyable_text=tool_copyable_text,  # Store extracted text for clipboard
             )
             template_messages.append(tool_template_message)
 
