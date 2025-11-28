@@ -159,7 +159,7 @@ def load_transcript(
     with open(jsonl_path, "r", encoding="utf-8", errors="replace") as f:
         if not silent:
             print(f"Processing {jsonl_path}...")
-        for line_no, line in enumerate(f):
+        for line_no, line in enumerate(f, 1):  # Start counting from 1
             line = line.strip()
             if line:
                 try:
@@ -204,6 +204,14 @@ def load_transcript(
                         # Parse using Pydantic models
                         entry = parse_transcript_entry(entry_dict)
                         messages.append(entry)
+                    elif (
+                        entry_type
+                        in [
+                            "file-history-snapshot",  # Internal Claude Code file backup metadata
+                        ]
+                    ):
+                        # Silently skip internal message types we don't render
+                        pass
                     else:
                         print(
                             f"Line {line_no} of {jsonl_path} is not a recognised message type: {line}"

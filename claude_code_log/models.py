@@ -230,17 +230,23 @@ class SystemTranscriptEntry(BaseTranscriptEntry):
 
 
 class QueueOperationTranscriptEntry(BaseModel):
-    """Queue operations (enqueue/dequeue) for message queueing tracking.
+    """Queue operations (enqueue/dequeue/remove) for message queueing tracking.
 
-    These are internal operations that track when messages are queued and dequeued.
+    enqueue/dequeue are internal operations that track when messages are queued and dequeued.
     They are parsed but not rendered, as the content duplicates actual user messages.
+
+    'remove' operations are out-of-band user inputs made visible to the agent while working
+    for "steering" purposes. These should be rendered as user messages with a 'steering' CSS class.
+    Content can be a list of ContentItems or a simple string (for 'remove' operations).
     """
 
     type: Literal["queue-operation"]
-    operation: Literal["enqueue", "dequeue"]
+    operation: Literal["enqueue", "dequeue", "remove", "popAll"]
     timestamp: str
     sessionId: str
-    content: Optional[List[ContentItem]] = None  # Only present for enqueue operations
+    content: Optional[Union[List[ContentItem], str]] = (
+        None  # List for enqueue, str for remove/popAll
+    )
     raw_json: Optional[str] = None  # Store original JSON for copy functionality
 
 
@@ -419,7 +425,7 @@ def parse_transcript_entry(data: Dict[str, Any]) -> TranscriptEntry:
         return SystemTranscriptEntry.model_validate(data)
 
     elif entry_type == "queue-operation":
-        # Parse content if present (only in enqueue operations)
+        # Parse content if present (in enqueue and remove operations)
         data_copy = data.copy()
         if "content" in data_copy and isinstance(data_copy["content"], list):
             data_copy["content"] = parse_message_content(data_copy["content"])

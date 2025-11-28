@@ -214,13 +214,10 @@
 }
 
 /* Sidechain messages (sub-assistant hierarchy) */
-/* Sub-assistant prompt at same level as Task tool (2em) */
-.sidechain.user {
-    margin-left: 2em;
-    margin-right: 6em;
-}
+/* Note: .sidechain.user (Sub-assistant prompt) is no longer produced
+   since it duplicates the Task tool input prompt */
 
-/* Sub-assistant response and thinking (nested below prompt) */
+/* Sub-assistant response and thinking (nested under Task tool result) */
 .sidechain.assistant,
 .sidechain.thinking {
     margin-left: 4em;
@@ -320,6 +317,12 @@
 /* Message type styling */
 .user {
     border-left-color: #ff9800;
+}
+
+/* Steering user messages (out-of-band input while agent is working) */
+.user.steering {
+    border-left-color: var(--user-dimmed);
+    opacity: 0.7;
 }
 
 .assistant {

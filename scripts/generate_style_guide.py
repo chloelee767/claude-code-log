@@ -8,8 +8,10 @@ and as documentation for the visual design.
 """
 
 import json
+import sys
 import tempfile
 from pathlib import Path
+
 from claude_code_log.converter import (
     convert_jsonl_to_html,
     generate_projects_index_html,
@@ -370,7 +372,7 @@ def generate_style_guide():
         jsonl_file = temp_path / "style_guide.jsonl"
 
         # Write style guide data
-        with open(jsonl_file, "w") as f:
+        with open(jsonl_file, "w", encoding="utf-8") as f:
             for entry in style_guide_data:
                 f.write(json.dumps(entry, ensure_ascii=False) + "\n")
 
@@ -514,4 +516,7 @@ def generate_style_guide():
 
 
 if __name__ == "__main__":
+    # Ensure stdout uses UTF-8 for emoji output when running as a script
+    if sys.stdout.encoding != "utf-8" and hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")  # type: ignore[union-attr]
     generate_style_guide()

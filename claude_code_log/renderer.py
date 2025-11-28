@@ -837,8 +837,8 @@ def _render_line_diff(old_line: str, new_line: str) -> str:
 def format_task_tool_content(tool_use: ToolUseContent) -> str:
     """Format Task tool content with markdown-rendered prompt.
 
-    Task tool spawns sub-agents. We render the prompt as the main content
-    (like it would appear in the "Sub-assistant prompt" message).
+    Task tool spawns sub-agents. We render the prompt as the main content.
+    The sidechain user message (which would duplicate this prompt) is skipped.
     """
     prompt = tool_use.input.get("prompt", "")
 
@@ -2232,40 +2232,35 @@ def _process_regular_message(
     message_type: str,
     is_sidechain: bool,
 ) -> tuple[str, str, str, str]:
-    """Process regular message and return (css_class, content_html, message_type, message_title)."""
+    """Process regular message and return (css_class, content_html, message_type, message_title).
+
+    Note: Sidechain user messages (Sub-assistant prompts) are now skipped entirely
+    in the main processing loop since they duplicate the Task tool input prompt.
+    """
     css_class = f"{message_type}"
     message_title = message_type.title()  # Default title
+    is_compacted = False
 
     # Handle user-specific preprocessing
     if message_type == "user":
-        # Sub-assistant prompts (sidechain user messages) should be rendered as markdown
-        if is_sidechain:
-            content_html = render_message_content(text_only_content, "assistant")
-            is_compacted = False
-            is_memory_input = False
-        else:
-            content_html, is_compacted, is_memory_input = render_user_message_content(
-                text_only_content
-            )
-            if is_compacted:
-                css_class = f"{message_type} compacted"
-                message_title = "User (compacted conversation)"
-            elif is_memory_input:
-                message_title = "Memory"
+        # Note: sidechain user messages are skipped before reaching this function
+        content_html, is_compacted, is_memory_input = render_user_message_content(
+            text_only_content
+        )
+        if is_compacted:
+            css_class = f"{message_type} compacted"
+            message_title = "User (compacted conversation)"
+        elif is_memory_input:
+            message_title = "Memory"
     else:
         # Non-user messages: render directly
         content_html = render_message_content(text_only_content, message_type)
-        is_compacted = False
 
     if is_sidechain:
         css_class = f"{css_class} sidechain"
-        # Update message title for display
-        if not is_compacted:  # Don't override compacted message title
-            message_title = (
-                "📝 Sub-assistant prompt"
-                if message_type == "user"
-                else "🔗 Sub-assistant"
-            )
+        # Update message title for display (only non-user types reach here)
+        if not is_compacted:
+            message_title = "🔗 Sub-assistant"
 
     return css_class, content_html, message_type, message_title
 
@@ -2483,14 +2478,18 @@ def _get_message_hierarchy_level(css_class: str, is_sidechain: bool) -> int:
     - Level 0: Session headers
     - Level 1: User messages
     - Level 2: System messages, Assistant, Thinking
-    - Level 3: Tool use/result (nested under assistant), Sidechain user (sub-assistant prompt)
-    - Level 4: Sidechain assistant/thinking (nested under sidechain user)
+    - Level 3: Tool use/result (nested under assistant)
+    - Level 4: Sidechain assistant/thinking (nested under Task tool result)
     - Level 5: Sidechain tools (nested under sidechain assistant)
+
+    Note: Sidechain user messages (Sub-assistant prompts) are now skipped entirely
+    since they duplicate the Task tool input prompt.
 
     Returns:
         Integer hierarchy level (1-5, session headers are 0)
     """
     # User messages at level 1 (under session)
+    # Note: sidechain user messages are skipped before reaching this function
     if "user" in css_class and not is_sidechain:
         return 1
 
@@ -2498,11 +2497,7 @@ def _get_message_hierarchy_level(css_class: str, is_sidechain: bool) -> int:
     if "system" in css_class and not is_sidechain:
         return 2
 
-    # Sidechain user (sub-assistant prompt) at level 3 (conceptually under Tool use that spawned it)
-    if is_sidechain and "user" in css_class:
-        return 3
-
-    # Sidechain assistant/thinking at level 4
+    # Sidechain assistant/thinking at level 4 (nested under Task tool result)
     if is_sidechain and ("assistant" in css_class or "thinking" in css_class):
         return 4
 
@@ -2867,13 +2862,20 @@ def _process_messages_loop(
         # Update current message UUID for timing tracking
         set_timing_var("_current_msg_uuid", msg_uuid)
 
+        # Skip sidechain user messages (Sub-assistant prompts)
+        # These duplicate the Task tool input prompt and are redundant
+        if message_type == "user" and getattr(message, "isSidechain", False):
+            continue
+
         # Skip summary messages - they should already be attached to their sessions
         if isinstance(message, SummaryTranscriptEntry):
             continue
 
-        # Skip queue-operation messages - they duplicate user messages
+        # Skip most queue operations - only render 'remove' as steering user messages
         if isinstance(message, QueueOperationTranscriptEntry):
-            continue
+            if message.operation != "remove":
+                continue
+            # 'remove' operations fall through to be rendered as user messages
 
         # Handle system messages separately
         if isinstance(message, SystemTranscriptEntry):
@@ -2976,9 +2978,17 @@ def _process_messages_loop(
             template_messages.append(system_template_message)
             continue
 
-        # Extract message content first to check for duplicates
-        # Must be UserTranscriptEntry or AssistantTranscriptEntry
-        message_content = message.message.content  # type: ignore
+        # Handle queue-operation 'remove' messages as user messages
+        if isinstance(message, QueueOperationTranscriptEntry):
+            # Queue operations have content directly, not in message.message
+            message_content = message.content if message.content else []
+            # Treat as user message type
+            message_type = "queue-operation"
+        else:
+            # Extract message content first to check for duplicates
+            # Must be UserTranscriptEntry or AssistantTranscriptEntry
+            message_content = message.message.content  # type: ignore
+
         text_content = extract_text_content(message_content)
 
         # Separate tool/thinking/image content from text content
@@ -2997,8 +3007,12 @@ def _process_messages_loop(
                     (ToolUseContent, ToolResultContent, ThinkingContent),
                 ) or item_type in ("tool_use", "tool_result", "thinking")
 
-                # Keep images inline for user messages, extract for assistant messages
-                if is_image and message_type == "user":
+                # Keep images inline for user messages and queue operations (steering),
+                # extract for assistant messages
+                if is_image and (
+                    message_type == "user"
+                    or isinstance(message, QueueOperationTranscriptEntry)
+                ):
                     text_only_items.append(item)
                 elif is_tool_item or is_image:
                     tool_items.append(item)
@@ -3038,6 +3052,7 @@ def _process_messages_loop(
             first_user_message = ""
             if (
                 message_type == "user"
+                and not isinstance(message, QueueOperationTranscriptEntry)
                 and hasattr(message, "message")
                 and should_use_as_session_starter(text_content)
             ):
@@ -3093,7 +3108,9 @@ def _process_messages_loop(
 
         # Update first user message if this is a user message and we don't have one yet
         elif message_type == "user" and not sessions[session_id]["first_user_message"]:
-            if hasattr(message, "message"):
+            if not isinstance(message, QueueOperationTranscriptEntry) and hasattr(
+                message, "message"
+            ):
                 first_user_content = extract_text_content(message.message.content)
                 if should_use_as_session_starter(first_user_content):
                     sessions[session_id]["first_user_message"] = create_session_preview(
@@ -3187,13 +3204,28 @@ def _process_messages_loop(
                 text_content
             )
         else:
-            css_class, content_html, message_type, message_title = (
+            # For queue-operation messages, treat them as user messages
+            if isinstance(message, QueueOperationTranscriptEntry):
+                effective_type = "user"
+            else:
+                effective_type = message_type
+
+            css_class, content_html, message_type_result, message_title = (
                 _process_regular_message(
                     text_only_content,
-                    message_type,
+                    effective_type,
                     getattr(message, "isSidechain", False),
                 )
             )
+            message_type = message_type_result  # Update message_type with result
+
+            # Add 'steering' CSS class for queue-operation 'remove' messages
+            if (
+                isinstance(message, QueueOperationTranscriptEntry)
+                and message.operation == "remove"
+            ):
+                css_class = f"{css_class} steering"
+                message_title = "User (steering)"
 
         # Only create main message if it has text content
         # For assistant/thinking with only tools (no text), we don't create a container message
