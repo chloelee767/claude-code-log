@@ -176,16 +176,16 @@ The project uses a categorized test system to avoid async event loop conflicts b
 
 ```bash
 # Run only unit tests (fast, recommended for development)
-uv run pytest -m "not (tui or browser)"
+uv run pytest -n auto -m "not (tui or browser)"
 
 # Run TUI tests (isolated event loop)
-uv run pytest -m tui
+uv run pytest -n auto -m tui
 
 # Run browser tests (requires Chromium)
-uv run pytest -m browser
+uv run pytest -n auto -m browser
 
 # Run all tests in sequence (separated to avoid conflicts)
-uv run pytest -m "not tui and not browser"; uv run pytest -m tui; uv run pytest -m browser
+uv run pytest -n auto -m "not tui and not browser"; uv run pytest -n auto -m tui; uv run pytest -n auto -m browser
 ```
 
 #### Prerequisites
@@ -212,13 +212,13 @@ Generate test coverage reports:
 
 ```bash
 # Run tests with coverage
-uv run pytest --cov=claude_code_log --cov-report=html --cov-report=term
+uv run pytest -n auto --cov=claude_code_log --cov-report=html --cov-report=term
 
 # Generate HTML coverage report only
-uv run pytest --cov=claude_code_log --cov-report=html
+uv run pytest -n auto --cov=claude_code_log --cov-report=html
 
 # View coverage in terminal
-uv run pytest --cov=claude_code_log --cov-report=term-missing
+uv run pytest -n auto --cov=claude_code_log --cov-report=term-missing
 ```
 
 HTML coverage reports are generated in `htmlcov/index.html`.
@@ -239,11 +239,11 @@ HTML coverage reports are generated in `htmlcov/index.html`.
 
 ### All Commands
 
-- **Test (Unit only)**: `uv run pytest`
-- **Test (TUI)**: `uv run pytest -m tui`
-- **Test (Browser)**: `uv run pytest -m browser`
-- **Test (All categories)**: `uv run pytest -m "not tui and not browser"; uv run pytest -m tui; uv run pytest -m browser`
-- **Test with Coverage**: `uv run pytest --cov=claude_code_log --cov-report=html --cov-report=term`
+- **Test (Unit only)**: `uv run pytest -n auto`
+- **Test (TUI)**: `uv run pytest -n auto -m tui`
+- **Test (Browser)**: `uv run pytest -n auto -m browser`
+- **Test (All categories)**: `uv run pytest -n auto -m "not tui and not browser"; uv run pytest -n auto -m tui; uv run pytest -n auto -m browser`
+- **Test with Coverage**: `uv run pytest -n auto --cov=claude_code_log --cov-report=html --cov-report=term`
 - **Format**: `ruff format`
 - **Lint**: `ruff check --fix`
 - **Type Check**: `uv run pyright` and `uv run ty check`
@@ -376,7 +376,6 @@ uv run claude-code-log
 
 - tutorial overlay
 - integrate `claude-trace` request logs if present?
-- Localised number formatting and timezone adjustment runtime? For this we'd need to make Jinja template variables more granular
 - convert images to WebP as screenshots are often huge PNGs – this might be time consuming to keep redoing (so would also need some caching) and need heavy dependencies with compilation (unless there are fast pure Python conversation libraries? Or WASM?)
 - add special formatting for built-in tools: Bash, Glob, Grep, LS, exit_plan_mode, Read, Edit, MultiEdit, Write, NotebookRead, NotebookEdit, WebFetch, TodoRead, TodoWrite, WebSearch
 - do we need to handle compacted conversation?
@@ -386,10 +385,11 @@ uv run claude-code-log
 – import logs from @claude Github Actions
 - stream logs from @claude Github Actions, see [octotail](https://github.com/getbettr/octotail)
 - wrap up CLI as Github Action to run after Cladue Github Action and process [output](https://github.com/anthropics/claude-code-base-action?tab=readme-ov-file#outputs)
-- extend into a VS Code extension that reads the JSONL real-time and displays stats like current context usage and implements a UI to see messages, todos, permissions, config, MCP status, etc
 - feed the filtered user messages to headless claude CLI to distill the user intent from the session
 - filter message type on Python (CLI) side too, not just UI
 - Markdown renderer
-- figure out minimum Python version and introduce a testing matrix
 - add minimalist theme and make it light + dark; animate gradient background in fancy theme
 - do we need special handling for hooks?
+- make processing parallel, currently we only use 1 CPU (core) and it's slow
+- migrate cache from JSON files to SQLite to make it faster and more versatile for downstream tasks and analytics
+- merge git worktree directories
