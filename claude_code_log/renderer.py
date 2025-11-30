@@ -22,6 +22,7 @@ from pygments.util import ClassNotFound  # type: ignore[reportUnknownVariableTyp
 from .models import (
     TranscriptEntry,
     AssistantTranscriptEntry,
+    UserTranscriptEntry,
     SystemTranscriptEntry,
     SummaryTranscriptEntry,
     QueueOperationTranscriptEntry,
@@ -406,6 +407,165 @@ def extract_command_info(text_content: str) -> tuple[str, str, str]:
     return command_name, command_args, command_contents
 
 
+def format_askuserquestion_content(tool_use: ToolUseContent) -> str:
+    """Format AskUserQuestion tool use content with prominent question display.
+
+    Handles multiple questions in a single tool use, each with optional header,
+    options (with label and description), and multiSelect flag.
+    """
+    questions_data = tool_use.input.get("questions", [])
+    # Also handle single question format for backwards compatibility
+    if not questions_data:
+        single_question = tool_use.input.get("question", "")
+        if single_question:
+            questions_data = [{"question": single_question}]
+
+    if not questions_data:
+        return render_params_table(tool_use.input)
+
+    # Build HTML for all questions
+    html_parts: List[str] = ['<div class="askuserquestion-content">']
+
+    for q_data in questions_data:
+        try:
+            question_text = escape_html(str(q_data.get("question", "")))
+            header = q_data.get("header", "")
+            options = q_data.get("options", [])
+            multi_select = q_data.get("multiSelect", False)
+
+            # Question container
+            html_parts.append('<div class="question-block">')
+
+            # Header (if present)
+            if header:
+                escaped_header = escape_html(str(header))
+                html_parts.append(
+                    f'<div class="question-header">{escaped_header}</div>'
+                )
+
+            # Question text with icon
+            html_parts.append(f'<div class="question-text">❓ {question_text}</div>')
+
+            # Options (if present)
+            if options:
+                select_hint = "(select multiple)" if multi_select else "(select one)"
+                html_parts.append(
+                    f'<div class="question-options-hint">{select_hint}</div>'
+                )
+                html_parts.append('<ul class="question-options">')
+                for opt in options:
+                    label = escape_html(str(opt.get("label", "")))
+                    desc = opt.get("description", "")
+                    if desc:
+                        desc_html = f'<span class="option-desc"> — {escape_html(str(desc))}</span>'
+                    else:
+                        desc_html = ""
+                    html_parts.append(
+                        f'<li class="question-option"><strong>{label}</strong>{desc_html}</li>'
+                    )
+                html_parts.append("</ul>")
+
+            html_parts.append("</div>")  # Close question-block
+        except (AttributeError, TypeError):
+            # Fallback for unexpected format
+            html_parts.append(
+                f'<div class="question-text">❓ {escape_html(str(q_data))}</div>'
+            )
+
+    html_parts.append("</div>")  # Close askuserquestion-content
+    return "".join(html_parts)
+
+
+def format_askuserquestion_result(content: str) -> str:
+    """Format AskUserQuestion tool result with styled question/answer pairs.
+
+    Parses the result format:
+    'User has answered your questions: "Q1"="A1", "Q2"="A2". You can now continue...'
+
+    Returns HTML with styled Q&A blocks matching the input styling.
+    """
+    import re
+
+    # Check if this is a successful answer
+    if not content.startswith("User has answered your question"):
+        # Return as-is for errors or unexpected format
+        return ""
+
+    # Extract the Q&A portion between the colon and the final sentence
+    # Pattern: 'User has answered your questions: "Q"="A", "Q"="A". You can now...'
+    match = re.match(
+        r"User has answered your questions?: (.+)\. You can now continue",
+        content,
+        re.DOTALL,
+    )
+    if not match:
+        return ""
+
+    qa_portion = match.group(1)
+
+    # Parse "Question"="Answer" pairs
+    # Pattern: "question text"="answer text"
+    qa_pattern = re.compile(r'"([^"]+)"="([^"]+)"')
+    pairs = qa_pattern.findall(qa_portion)
+
+    if not pairs:
+        return ""
+
+    # Build styled HTML
+    html_parts: List[str] = [
+        '<div class="askuserquestion-content askuserquestion-result">'
+    ]
+
+    for question, answer in pairs:
+        escaped_q = escape_html(question)
+        escaped_a = escape_html(answer)
+        html_parts.append('<div class="question-block answered">')
+        html_parts.append(f'<div class="question-text">❓ {escaped_q}</div>')
+        html_parts.append(f'<div class="answer-text">✅ {escaped_a}</div>')
+        html_parts.append("</div>")
+
+    html_parts.append("</div>")
+    return "".join(html_parts)
+
+
+def format_exitplanmode_content(tool_use: ToolUseContent) -> str:
+    """Format ExitPlanMode tool use content with collapsible plan markdown.
+
+    Renders the plan markdown in a collapsible section, similar to Task tool results.
+    """
+    plan = tool_use.input.get("plan", "")
+
+    if not plan:
+        # No plan, show parameters table as fallback
+        return render_params_table(tool_use.input)
+
+    return render_markdown_collapsible(plan, "plan-content")
+
+
+def format_exitplanmode_result(content: str) -> str:
+    """Format ExitPlanMode tool result, truncating the redundant plan echo.
+
+    When a plan is approved, the result contains:
+    1. A confirmation message
+    2. Path to saved plan file
+    3. "## Approved Plan:" followed by full plan text (redundant)
+
+    We truncate everything after "## Approved Plan:" to avoid duplication.
+    For error results (plan not approved), we keep the full content.
+    """
+    # Check if this is a successful approval
+    if "User has approved your plan" in content:
+        # Truncate at "## Approved Plan:"
+        marker = "## Approved Plan:"
+        marker_pos = content.find(marker)
+        if marker_pos > 0:
+            # Keep everything before the marker, strip trailing whitespace
+            return content[:marker_pos].rstrip()
+
+    # For errors or other cases, return as-is
+    return content
+
+
 def format_todowrite_content(tool_use: ToolUseContent) -> str:
     """Format TodoWrite tool use content as an actual todo list with checkboxes."""
     # Parse todos from input
@@ -535,8 +695,9 @@ def _highlight_code_with_pygments(
                     break
 
         # Get lexer or use TextLexer as fallback
+        # Note: stripall=False preserves leading whitespace (important for code indentation)
         if lexer_alias:
-            lexer = get_lexer_by_name(lexer_alias, stripall=True)  # type: ignore[reportUnknownVariableType]
+            lexer = get_lexer_by_name(lexer_alias, stripall=False)  # type: ignore[reportUnknownVariableType]
         else:
             lexer = TextLexer()  # type: ignore[reportUnknownVariableType]
     except ClassNotFound:
@@ -970,6 +1131,14 @@ def format_tool_use_content(tool_use: ToolUseContent) -> str:
     if tool_use.name == "Task":
         return format_task_tool_content(tool_use)
 
+    # Special handling for AskUserQuestion
+    if tool_use.name == "AskUserQuestion":
+        return format_askuserquestion_content(tool_use)
+
+    # Special handling for ExitPlanMode
+    if tool_use.name == "ExitPlanMode":
+        return format_exitplanmode_content(tool_use)
+
     # Default: render as key/value table using shared renderer
     return render_params_table(tool_use.input)
 
@@ -1190,6 +1359,19 @@ def format_tool_result_content(
     # Deduplication is now handled retroactively by replacing the sub-assistant content
     if tool_name == "Task" and not has_images:
         return render_markdown_collapsible(raw_content, "task-result")
+
+    # Special handling for ExitPlanMode tool: truncate redundant plan echo on success
+    if tool_name == "ExitPlanMode" and not has_images:
+        processed_content = format_exitplanmode_result(raw_content)
+        escaped_content = escape_html(processed_content)
+        return f"<pre>{escaped_content}</pre>"
+
+    # Special handling for AskUserQuestion tool: render Q&A pairs with styling
+    if tool_name == "AskUserQuestion" and not has_images:
+        styled_result = format_askuserquestion_result(raw_content)
+        if styled_result:
+            return styled_result
+        # Fall through to default handling if parsing fails
 
     # Check if this looks like Bash tool output and process ANSI codes
     # Bash tool results often contain ANSI escape sequences and terminal output
@@ -2637,6 +2819,77 @@ def _mark_messages_with_children(messages: List[TemplateMessage]) -> None:
                 )
 
 
+def deduplicate_messages(messages: List[TranscriptEntry]) -> List[TranscriptEntry]:
+    """Remove duplicate messages based on (type, timestamp, sessionId, content_key).
+
+    Messages with the exact same timestamp are duplicates by definition -
+    the differences (like IDE selection tags) are just logging artifacts.
+
+    We need a content-based key to handle two cases:
+    1. Version stutter: Same message logged twice during Claude Code upgrade
+       -> Same timestamp, same message.id or tool_use_id -> SHOULD deduplicate
+    2. Concurrent tool results: Multiple tool results with same timestamp
+       -> Same timestamp, different tool_use_ids -> should NOT deduplicate
+
+    Args:
+        messages: List of transcript entries to deduplicate
+
+    Returns:
+        List of deduplicated messages, preserving order (first occurrence kept)
+    """
+    # Track seen (message_type, timestamp, is_meta, session_id, content_key) tuples
+    seen: set[tuple[str, str, bool, str, str]] = set()
+    deduplicated: List[TranscriptEntry] = []
+
+    for message in messages:
+        # Get basic message type
+        message_type = getattr(message, "type", "unknown")
+
+        # For system messages, include level to differentiate info/warning/error
+        if isinstance(message, SystemTranscriptEntry):
+            level = getattr(message, "level", "info")
+            message_type = f"system-{level}"
+
+        # Get timestamp
+        timestamp = getattr(message, "timestamp", "")
+
+        # Get isMeta flag (slash command prompts have isMeta=True with same timestamp as parent)
+        is_meta = getattr(message, "isMeta", False)
+
+        # Get sessionId for multi-session report deduplication
+        session_id = getattr(message, "sessionId", "")
+
+        # Get content key for differentiating concurrent messages
+        # - For assistant messages: use message.id (same for stutters, different for different msgs)
+        # - For user messages with tool results: use first tool_use_id
+        # - For other messages: use uuid as fallback
+        content_key = ""
+        if isinstance(message, AssistantTranscriptEntry):
+            # For assistant messages, use the message id
+            content_key = message.message.id
+        elif isinstance(message, UserTranscriptEntry):
+            # For user messages, check for tool results
+            if isinstance(message.message.content, list):
+                for item in message.message.content:
+                    if isinstance(item, ToolResultContent):
+                        content_key = item.tool_use_id
+                        break
+        # Fallback to uuid if no content key found
+        if not content_key:
+            content_key = getattr(message, "uuid", "")
+
+        # Create deduplication key - include content_key for proper handling
+        # of both version stutters and concurrent tool results
+        dedup_key = (message_type, timestamp, is_meta, session_id, content_key)
+
+        # Keep only first occurrence
+        if dedup_key not in seen:
+            seen.add(dedup_key)
+            deduplicated.append(message)
+
+    return deduplicated
+
+
 def generate_html(
     messages: List[TranscriptEntry],
     title: Optional[str] = None,
@@ -2649,44 +2902,6 @@ def generate_html(
     with log_timing("Initialization", t_start):
         if not title:
             title = "Claude Transcript"
-
-    # Deduplicate messages by (message_type, timestamp)
-    # Messages with the exact same timestamp are duplicates by definition -
-    # the differences (like IDE selection tags) are just logging artifacts
-    with log_timing(
-        lambda: f"Deduplication ({len(deduplicated_messages)} messages)", t_start
-    ):
-        # Track seen (message_type, timestamp, is_meta, session_id) tuples
-        seen: set[tuple[str, str, bool, str]] = set()
-        deduplicated_messages: List[TranscriptEntry] = []
-
-        for message in messages:
-            # Get basic message type
-            message_type = getattr(message, "type", "unknown")
-
-            # For system messages, include level to differentiate info/warning/error
-            if isinstance(message, SystemTranscriptEntry):
-                level = getattr(message, "level", "info")
-                message_type = f"system-{level}"
-
-            # Get timestamp
-            timestamp = getattr(message, "timestamp", "")
-
-            # Get isMeta flag (slash command prompts have isMeta=True with same timestamp as parent)
-            is_meta = getattr(message, "isMeta", False)
-
-            # Get sessionId for multi-session report deduplication
-            session_id = getattr(message, "sessionId", "")
-
-            # Create deduplication key - include isMeta and sessionId for proper deduplication
-            dedup_key = (message_type, timestamp, is_meta, session_id)
-
-            # Keep only first occurrence
-            if dedup_key not in seen:
-                seen.add(dedup_key)
-                deduplicated_messages.append(message)
-
-        messages = deduplicated_messages
 
     # Pre-process to find and attach session summaries
     with log_timing("Session summary processing", t_start):
@@ -2896,10 +3111,8 @@ def _process_messages_loop(
         # Update current message UUID for timing tracking
         set_timing_var("_current_msg_uuid", msg_uuid)
 
-        # Skip sidechain user messages (Sub-assistant prompts)
-        # These duplicate the Task tool input prompt and are redundant
-        if message_type == "user" and getattr(message, "isSidechain", False):
-            continue
+        # NOTE: Sidechain user messages are handled below after content extraction
+        # to distinguish prompts (skip) from tool results (render)
 
         # Skip summary messages - they should already be attached to their sessions
         if isinstance(message, SummaryTranscriptEntry):
@@ -3065,6 +3278,22 @@ def _process_messages_loop(
         # Skip messages that should be filtered out
         if should_skip_message(text_content):
             continue
+
+        # Skip sidechain user messages that are just prompts (no tool results)
+        # Sidechain prompts duplicate the Task tool input and are redundant,
+        # but tool results from sidechain agents should be rendered
+        if message_type == "user" and getattr(message, "isSidechain", False):
+            has_tool_results = any(
+                getattr(item, "type", None) == "tool_result"
+                or isinstance(item, ToolResultContent)
+                for item in tool_items
+            )
+            if not has_tool_results:
+                continue
+            # For sidechain user messages with tool results, clear text content
+            # to avoid rendering the redundant prompt text
+            text_only_content = []
+            text_content = ""
 
         # Check message types for special handling
         is_command = is_command_message(text_content)
@@ -3449,11 +3678,9 @@ def _process_messages_loop(
                 escaped_id = escape_html(tool_result_converted.tool_use_id)
                 item_tool_use_id = tool_result_converted.tool_use_id
                 tool_title_hint = f"ID: {escaped_id}"
-                # Simplified: no "Tool Result" heading, just show error indicator if present
+                # Simplified: no "Tool Result" heading, icon is set by template
                 tool_message_type = "tool_result"
-                tool_message_title = (
-                    "🚨 Error" if tool_result_converted.is_error else ""
-                )
+                tool_message_title = "Error" if tool_result_converted.is_error else ""
                 tool_css_class = (
                     "tool_result error"
                     if tool_result_converted.is_error

@@ -110,6 +110,7 @@
                 elif message.css_class.startswith('assistant') %}🤖 {%
                 elif message.css_class == 'system' %}⚙️ {%
                 elif message.css_class.startswith('tool_use') and not starts_with_emoji(message.message_title) %}🛠️ {%
+                elif message.css_class == 'tool_result error' %}🚨 {%
                 elif message.css_class.startswith('tool_result') %}🧰 {%
                 elif message.css_class.startswith('thinking') %}💭 {%
                 elif message.css_class == 'image' %}🖼️ {% endif %}{{ message.message_title | safe }}{% endif %}</span>
@@ -212,9 +213,13 @@
             }
 
             // Toggle details functionality
+            // Selector for all collapsible details elements (multiple classes)
+            const collapsibleSelector = 'details.collapsible-details, details.collapsible-code, details.tool-param-collapsible';
+            const collapsibleOpenSelector = 'details[open].collapsible-details, details[open].collapsible-code, details[open].tool-param-collapsible';
+
             function updateToggleButton() {
-                const allDetails = document.querySelectorAll('details.collapsible-details');
-                const openCount = document.querySelectorAll('details[open].collapsible-details').length;
+                const allDetails = document.querySelectorAll(collapsibleSelector);
+                const openCount = document.querySelectorAll(collapsibleOpenSelector).length;
                 const totalCount = allDetails.length;
 
                 if (totalCount === 0) {
@@ -229,8 +234,8 @@
             }
 
             function toggleAllDetails() {
-                const allDetails = document.querySelectorAll('details.collapsible-details');
-                const openCount = document.querySelectorAll('details[open].collapsible-details').length;
+                const allDetails = document.querySelectorAll(collapsibleSelector);
+                const openCount = document.querySelectorAll(collapsibleOpenSelector).length;
                 const shouldOpen = openCount <= allDetails.length / 2;
 
                 allDetails.forEach(details => {

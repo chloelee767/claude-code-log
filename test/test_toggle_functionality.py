@@ -134,12 +134,19 @@ class TestToggleFunctionality:
 
         html = generate_html([message], "Test Selectors")
 
-        # Check that JavaScript uses the correct selectors
-        assert "querySelectorAll('details.collapsible-details')" in html, (
-            "JavaScript should target collapsible details correctly"
+        # Check that JavaScript uses the correct selectors for ALL collapsible types
+        assert "collapsibleSelector" in html, (
+            "JavaScript should define collapsible selector variable"
         )
-        assert "querySelectorAll('details[open].collapsible-details')" in html, (
-            "JavaScript should target open details correctly"
+        # All three collapsible classes should be included
+        assert "details.collapsible-details" in html, (
+            "JavaScript should target collapsible-details"
+        )
+        assert "details.collapsible-code" in html, (
+            "JavaScript should target collapsible-code"
+        )
+        assert "details.tool-param-collapsible" in html, (
+            "JavaScript should target tool-param-collapsible"
         )
 
     def test_toggle_button_icons_and_titles(self):
@@ -166,7 +173,7 @@ class TestToggleFunctionality:
     def test_multiple_collapsible_elements(self):
         """Test handling of multiple collapsible elements."""
         # Create multiple tool uses
-        tool_contents = []
+        tool_contents: List[Dict[str, Any]] = []
         for i in range(3):
             tool_content = {
                 "type": "tool_use",
@@ -230,4 +237,45 @@ class TestToggleFunctionality:
         assert 'class="collapsible-details"' in html, (
             "Tool result should be collapsible"
         )
-        assert "🧰 Tool Result" in html, "Should show tool result icon"
+        assert "🧰" in html, "Should show tool result icon"
+
+    def test_tool_result_error_single_icon(self):
+        """Test that error tool results show only the error icon, not double icons."""
+        error_result = "Error: Something went wrong"
+        tool_result_content = {
+            "type": "tool_result",
+            "tool_use_id": "test_tool",
+            "content": error_result,
+            "is_error": True,
+        }
+
+        message = self._create_assistant_message([tool_result_content])
+
+        html = generate_html([message], "Test Error Tool Result")
+
+        # Should have the error icon, not the tool result icon
+        assert "🚨" in html, "Should show error icon"
+        # Should NOT have double icons (🧰 followed by 🚨)
+        assert "🧰 🚨" not in html, "Should not have double icons"
+        # The error icon should be before "Error" text
+        assert "🚨 Error" in html, "Should show error icon with Error text"
+
+    def test_tool_param_collapsible_hides_summary_when_open(self):
+        """Test that CSS hides summary when tool param details is open."""
+        long_content = "x" * 300
+        tool_use_content = {
+            "type": "tool_use",
+            "id": "test_tool",
+            "name": "TestTool",
+            "input": {"content": long_content},
+        }
+
+        message = self._create_assistant_message([tool_use_content])
+
+        html = generate_html([message], "Test Param Visibility")
+
+        # Check CSS rule that hides summary when details is open
+        assert ".tool-param-collapsible[open] > summary" in html, (
+            "CSS should target open collapsible summary"
+        )
+        assert "display: none" in html, "CSS should hide summary when details is open"
