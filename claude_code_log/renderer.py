@@ -394,8 +394,8 @@ def extract_copyable_text(
         item_type = getattr(item, "type", None)
 
         if isinstance(item, TextContent):
-            # Text content: return original markdown/text
-            parts.append(item.text)
+            # Text content: return original markdown/text (strip ANSI codes)
+            parts.append(_strip_ansi_codes(item.text))
 
         elif isinstance(item, ToolUseContent):
             # Tool use: JSON format with tool name and input

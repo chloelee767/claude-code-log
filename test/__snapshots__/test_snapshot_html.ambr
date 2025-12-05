@@ -2331,7 +2331,31 @@
   .timestamp-row {
       display: flex;
       flex-direction: row;
-      align-items: normal;
+      align-items: center;
+      gap: 0.5em;
+  }
+  
+  /* Copy JSON button styling */
+  .copy-json-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1em;
+      padding: 0.2em 0.4em;
+      border-radius: 3px;
+      transition: all 0.2s ease;
+      opacity: 0.5;
+  }
+  
+  .copy-json-btn:hover {
+      opacity: 1;
+      background-color: var(--highlight-dimmed);
+      transform: scale(1.1);
+  }
+  
+  .copy-json-btn:active {
+      transform: scale(0.95);
+  }
       gap: 8px;
   }
   
@@ -4789,12 +4813,34 @@
       
       
       
-      <div class='message user session-test_session' data-message-id='d-0' id='msg-d-0'>
+      <div class='message user session-test_session' data-message-id='d-0' id='msg-d-0' data-raw-json='{
+    &#34;type&#34;: &#34;user&#34;,
+    &#34;timestamp&#34;: &#34;2025-07-03T15:50:07.874907Z&#34;,
+    &#34;parentUuid&#34;: null,
+    &#34;isSidechain&#34;: false,
+    &#34;userType&#34;: &#34;human&#34;,
+    &#34;cwd&#34;: &#34;/tmp&#34;,
+    &#34;sessionId&#34;: &#34;test_session&#34;,
+    &#34;version&#34;: &#34;1.0.0&#34;,
+    &#34;uuid&#34;: &#34;msg_001&#34;,
+    &#34;message&#34;: {
+      &#34;role&#34;: &#34;user&#34;,
+      &#34;content&#34;: [
+        {
+          &#34;type&#34;: &#34;text&#34;,
+          &#34;text&#34;: &#34;Hello Claude! Can you help me understand how Python decorators work?&#34;
+        }
+      ]
+    }
+  }' data-copyable-text='Hello Claude! Can you help me understand how Python decorators work?'>
           <div class='header'>
               <span>🤷 User</span>
               <div class='header-info'>
                   <div class='timestamp-row'>
                       <span class='timestamp' data-timestamp='2025-07-03T15:50:07.874907Z'>2025-07-03 15:50:07</span>
+                      
+                      <button class='copy-json-btn' data-message-id='d-0' title='Copy message content'>📋</button>
+                      
                   </div>
                   
               </div>
@@ -4816,12 +4862,47 @@
       
       
       
-      <div class='message assistant session-test_session d-0' data-message-id='d-1' id='msg-d-1'>
+      <div class='message assistant session-test_session d-0' data-message-id='d-1' id='msg-d-1' data-raw-json='{
+    &#34;type&#34;: &#34;assistant&#34;,
+    &#34;timestamp&#34;: &#34;2025-07-03T15:52:07.874907Z&#34;,
+    &#34;parentUuid&#34;: null,
+    &#34;isSidechain&#34;: false,
+    &#34;userType&#34;: &#34;human&#34;,
+    &#34;cwd&#34;: &#34;/tmp&#34;,
+    &#34;sessionId&#34;: &#34;test_session&#34;,
+    &#34;version&#34;: &#34;1.0.0&#34;,
+    &#34;uuid&#34;: &#34;msg_002&#34;,
+    &#34;requestId&#34;: &#34;req_001&#34;,
+    &#34;message&#34;: {
+      &#34;id&#34;: &#34;msg_002&#34;,
+      &#34;type&#34;: &#34;message&#34;,
+      &#34;role&#34;: &#34;assistant&#34;,
+      &#34;model&#34;: &#34;claude-3-sonnet-20240229&#34;,
+      &#34;content&#34;: [
+        {
+          &#34;type&#34;: &#34;text&#34;,
+          &#34;text&#34;: &#34;I&amp;apos;d be happy to help you understand Python decorators! A decorator is a design pattern that allows you to modify or extend the behavior of functions or classes without permanently modifying their code.\n\nHere&amp;apos;s a simple example:\n\n```python\ndef my_decorator(func):\n    def wrapper():\n        print(\&#34;Something before the function\&#34;)\n        func()\n        print(\&#34;Something after the function\&#34;)\n    return wrapper\n\n@my_decorator\ndef say_hello():\n    print(\&#34;Hello!\&#34;)\n\nsay_hello()\n```\n\nThis will output:\n```\nSomething before the function\nHello!\nSomething after the function\n```&#34;
+        }
+      ],
+      &#34;stop_reason&#34;: &#34;end_turn&#34;,
+      &#34;stop_sequence&#34;: null,
+      &#34;usage&#34;: {
+        &#34;input_tokens&#34;: 25,
+        &#34;cache_creation_input_tokens&#34;: 0,
+        &#34;cache_read_input_tokens&#34;: 0,
+        &#34;output_tokens&#34;: 120,
+        &#34;service_tier&#34;: &#34;standard&#34;
+      }
+    }
+  }' data-copyable-text='I&amp;apos;d be happy to help you understand Python decorators! A decorator is a design pattern that allows you to modify or extend the behavior of functions or classes without permanently modifying their code.&amp;#10;&amp;#10;Here&amp;apos;s a simple example:&amp;#10;&amp;#10;```python&amp;#10;def my_decorator(func):&amp;#10;    def wrapper():&amp;#10;        print(&#34;Something before the function&#34;)&amp;#10;        func()&amp;#10;        print(&#34;Something after the function&#34;)&amp;#10;    return wrapper&amp;#10;&amp;#10;@my_decorator&amp;#10;def say_hello():&amp;#10;    print(&#34;Hello!&#34;)&amp;#10;&amp;#10;say_hello()&amp;#10;```&amp;#10;&amp;#10;This will output:&amp;#10;```&amp;#10;Something before the function&amp;#10;Hello!&amp;#10;Something after the function&amp;#10;```'>
           <div class='header'>
               <span>🤖 Assistant</span>
               <div class='header-info'>
                   <div class='timestamp-row'>
                       <span class='timestamp' data-timestamp='2025-07-03T15:52:07.874907Z'>2025-07-03 15:52:07</span>
+                      
+                      <button class='copy-json-btn' data-message-id='d-1' title='Copy message content'>📋</button>
+                      
                   </div>
                   
                   <span class='token-usage'>Input: 25 | Output: 120</span>
@@ -4855,12 +4936,34 @@
       
       
       
-      <div class='message user session-test_session' data-message-id='d-2' id='msg-d-2'>
+      <div class='message user session-test_session' data-message-id='d-2' id='msg-d-2' data-raw-json='{
+    &#34;type&#34;: &#34;user&#34;,
+    &#34;timestamp&#34;: &#34;2025-07-03T15:54:07.874907Z&#34;,
+    &#34;parentUuid&#34;: null,
+    &#34;isSidechain&#34;: false,
+    &#34;userType&#34;: &#34;human&#34;,
+    &#34;cwd&#34;: &#34;/tmp&#34;,
+    &#34;sessionId&#34;: &#34;test_session&#34;,
+    &#34;version&#34;: &#34;1.0.0&#34;,
+    &#34;uuid&#34;: &#34;msg_003&#34;,
+    &#34;message&#34;: {
+      &#34;role&#34;: &#34;user&#34;,
+      &#34;content&#34;: [
+        {
+          &#34;type&#34;: &#34;text&#34;,
+          &#34;text&#34;: &#34;Great! Can you also show me how to create a decorator that takes parameters?&#34;
+        }
+      ]
+    }
+  }' data-copyable-text='Great! Can you also show me how to create a decorator that takes parameters?'>
           <div class='header'>
               <span>🤷 User</span>
               <div class='header-info'>
                   <div class='timestamp-row'>
                       <span class='timestamp' data-timestamp='2025-07-03T15:54:07.874907Z'>2025-07-03 15:54:07</span>
+                      
+                      <button class='copy-json-btn' data-message-id='d-2' title='Copy message content'>📋</button>
+                      
                   </div>
                   
               </div>
@@ -4882,12 +4985,51 @@
       
       
       
-      <div class='message tool_use paired-message pair_first session-test_session d-2' data-message-id='d-3' id='msg-d-3-first'>
+      <div class='message tool_use paired-message pair_first session-test_session d-2' data-message-id='d-3' id='msg-d-3-first' data-raw-json='{
+    &#34;type&#34;: &#34;assistant&#34;,
+    &#34;timestamp&#34;: &#34;2025-07-03T15:56:07.874907Z&#34;,
+    &#34;parentUuid&#34;: null,
+    &#34;isSidechain&#34;: false,
+    &#34;userType&#34;: &#34;human&#34;,
+    &#34;cwd&#34;: &#34;/tmp&#34;,
+    &#34;sessionId&#34;: &#34;test_session&#34;,
+    &#34;version&#34;: &#34;1.0.0&#34;,
+    &#34;uuid&#34;: &#34;msg_004&#34;,
+    &#34;requestId&#34;: &#34;req_002&#34;,
+    &#34;message&#34;: {
+      &#34;id&#34;: &#34;msg_004&#34;,
+      &#34;type&#34;: &#34;message&#34;,
+      &#34;role&#34;: &#34;assistant&#34;,
+      &#34;model&#34;: &#34;claude-3-sonnet-20240229&#34;,
+      &#34;content&#34;: [
+        {
+          &#34;type&#34;: &#34;tool_use&#34;,
+          &#34;id&#34;: &#34;tool_001&#34;,
+          &#34;name&#34;: &#34;Edit&#34;,
+          &#34;input&#34;: {
+            &#34;file_path&#34;: &#34;/tmp/decorator_example.py&#34;,
+            &#34;old_string&#34;: &#34;&#34;,
+            &#34;new_string&#34;: &#34;def repeat(times):\n    def decorator(func):\n        def wrapper(*args, **kwargs):\n            for _ in range(times):\n                result = func(*args, **kwargs)\n            return result\n        return wrapper\n    return decorator\n\n@repeat(3)\ndef greet(name):\n    print(f\&#34;Hello, {name}!\&#34;)\n\ngreet(\&#34;Alice\&#34;)&#34;
+          }
+        }
+      ],
+      &#34;stop_reason&#34;: &#34;tool_use&#34;,
+      &#34;stop_sequence&#34;: null,
+      &#34;usage&#34;: {
+        &#34;input_tokens&#34;: 45,
+        &#34;cache_creation_input_tokens&#34;: 0,
+        &#34;cache_read_input_tokens&#34;: 0,
+        &#34;output_tokens&#34;: 85,
+        &#34;service_tier&#34;: &#34;standard&#34;
+      }
+    }
+  }'>
           <div class='header'>
               <span title="ID: tool_001">📝 Edit <span class='tool-summary'>/tmp/decorator_example.py</span></span>
               <div class='header-info'>
                   <div class='timestamp-row'>
                       <span class='timestamp' data-timestamp='2025-07-03T15:56:07.874907Z'>2025-07-03 15:56:07</span>
+                      
                   </div>
                   
               </div>
@@ -4899,12 +5041,37 @@
       
       
       
-      <div class='message tool_result paired-message pair_last session-test_session d-2' data-message-id='d-4' id='msg-d-4-last'>
+      <div class='message tool_result paired-message pair_last session-test_session d-2' data-message-id='d-4' id='msg-d-4-last' data-raw-json='{
+    &#34;type&#34;: &#34;user&#34;,
+    &#34;timestamp&#34;: &#34;2025-07-03T15:58:07.874907Z&#34;,
+    &#34;parentUuid&#34;: null,
+    &#34;isSidechain&#34;: false,
+    &#34;userType&#34;: &#34;human&#34;,
+    &#34;cwd&#34;: &#34;/tmp&#34;,
+    &#34;sessionId&#34;: &#34;test_session&#34;,
+    &#34;version&#34;: &#34;1.0.0&#34;,
+    &#34;uuid&#34;: &#34;msg_005&#34;,
+    &#34;toolUseResult&#34;: &#34;File created successfully at: /tmp/decorator_example.py&#34;,
+    &#34;message&#34;: {
+      &#34;role&#34;: &#34;user&#34;,
+      &#34;content&#34;: [
+        {
+          &#34;type&#34;: &#34;tool_result&#34;,
+          &#34;tool_use_id&#34;: &#34;tool_001&#34;,
+          &#34;content&#34;: &#34;File created successfully at: /tmp/decorator_example.py&#34;,
+          &#34;is_error&#34;: false
+        }
+      ]
+    }
+  }' data-copyable-text='File created successfully at: /tmp/decorator_example.py'>
           <div class='header'>
               <span title="ID: tool_001"></span>
               <div class='header-info'>
                   <div class='timestamp-row'>
                       <span class='timestamp' data-timestamp='2025-07-03T15:58:07.874907Z' data-duration='took 2m 0s'>2025-07-03 15:58:07</span>
+                      
+                      <button class='copy-json-btn' data-message-id='d-4' title='Copy message content'>📋</button>
+                      
                   </div>
                   
               </div>
@@ -4916,12 +5083,47 @@
       
       
       
-      <div class='message assistant session-test_session d-2' data-message-id='d-5' id='msg-d-5'>
+      <div class='message assistant session-test_session d-2' data-message-id='d-5' id='msg-d-5' data-raw-json='{
+    &#34;type&#34;: &#34;assistant&#34;,
+    &#34;timestamp&#34;: &#34;2025-07-03T16:00:07.874907Z&#34;,
+    &#34;parentUuid&#34;: null,
+    &#34;isSidechain&#34;: false,
+    &#34;userType&#34;: &#34;human&#34;,
+    &#34;cwd&#34;: &#34;/tmp&#34;,
+    &#34;sessionId&#34;: &#34;test_session&#34;,
+    &#34;version&#34;: &#34;1.0.0&#34;,
+    &#34;uuid&#34;: &#34;msg_006&#34;,
+    &#34;requestId&#34;: &#34;req_003&#34;,
+    &#34;message&#34;: {
+      &#34;id&#34;: &#34;msg_006&#34;,
+      &#34;type&#34;: &#34;message&#34;,
+      &#34;role&#34;: &#34;assistant&#34;,
+      &#34;model&#34;: &#34;claude-3-sonnet-20240229&#34;,
+      &#34;content&#34;: [
+        {
+          &#34;type&#34;: &#34;text&#34;,
+          &#34;text&#34;: &#34;Perfect! I&amp;apos;ve created an example of a parameterized decorator. Here&amp;apos;s how it works:\n\n1. **`repeat(times)`** - This is the decorator factory that takes parameters\n2. **`decorator(func)`** - This is the actual decorator that gets returned\n3. **`wrapper(*args, **kwargs)`** - This is the wrapper function that does the work\n\nThe key insight is that we have **three levels of functions**:\n- The outermost function takes the decorator parameters\n- The middle function takes the function to be decorated\n- The innermost function is the actual wrapper that gets called\n\nWhen you run this code, it will print \&#34;Hello, Alice!\&#34; three times.&#34;
+        }
+      ],
+      &#34;stop_reason&#34;: &#34;end_turn&#34;,
+      &#34;stop_sequence&#34;: null,
+      &#34;usage&#34;: {
+        &#34;input_tokens&#34;: 78,
+        &#34;cache_creation_input_tokens&#34;: 0,
+        &#34;cache_read_input_tokens&#34;: 0,
+        &#34;output_tokens&#34;: 95,
+        &#34;service_tier&#34;: &#34;standard&#34;
+      }
+    }
+  }' data-copyable-text='Perfect! I&amp;apos;ve created an example of a parameterized decorator. Here&amp;apos;s how it works:&amp;#10;&amp;#10;1. **`repeat(times)`** - This is the decorator factory that takes parameters&amp;#10;2. **`decorator(func)`** - This is the actual decorator that gets returned&amp;#10;3. **`wrapper(*args, **kwargs)`** - This is the wrapper function that does the work&amp;#10;&amp;#10;The key insight is that we have **three levels of functions**:&amp;#10;- The outermost function takes the decorator parameters&amp;#10;- The middle function takes the function to be decorated&amp;#10;- The innermost function is the actual wrapper that gets called&amp;#10;&amp;#10;When you run this code, it will print &#34;Hello, Alice!&#34; three times.'>
           <div class='header'>
               <span>🤖 Assistant</span>
               <div class='header-info'>
                   <div class='timestamp-row'>
                       <span class='timestamp' data-timestamp='2025-07-03T16:00:07.874907Z'>2025-07-03 16:00:07</span>
+                      
+                      <button class='copy-json-btn' data-message-id='d-5' title='Copy message content'>📋</button>
+                      
                   </div>
                   
                   <span class='token-usage'>Input: 78 | Output: 95</span>
@@ -4948,12 +5150,34 @@
       
       
       
-      <div class='message user session-test_session' data-message-id='d-6' id='msg-d-6'>
+      <div class='message user session-test_session' data-message-id='d-6' id='msg-d-6' data-raw-json='{
+    &#34;type&#34;: &#34;user&#34;,
+    &#34;timestamp&#34;: &#34;2025-07-03T16:02:07.874907Z&#34;,
+    &#34;parentUuid&#34;: null,
+    &#34;isSidechain&#34;: false,
+    &#34;userType&#34;: &#34;human&#34;,
+    &#34;cwd&#34;: &#34;/tmp&#34;,
+    &#34;sessionId&#34;: &#34;test_session&#34;,
+    &#34;version&#34;: &#34;1.0.0&#34;,
+    &#34;uuid&#34;: &#34;msg_007&#34;,
+    &#34;message&#34;: {
+      &#34;role&#34;: &#34;user&#34;,
+      &#34;content&#34;: [
+        {
+          &#34;type&#34;: &#34;text&#34;,
+          &#34;text&#34;: &#34;Can you run that example to show the output?&#34;
+        }
+      ]
+    }
+  }' data-copyable-text='Can you run that example to show the output?'>
           <div class='header'>
               <span>🤷 User</span>
               <div class='header-info'>
                   <div class='timestamp-row'>
                       <span class='timestamp' data-timestamp='2025-07-03T16:02:07.874907Z'>2025-07-03 16:02:07</span>
+                      
+                      <button class='copy-json-btn' data-message-id='d-6' title='Copy message content'>📋</button>
+                      
                   </div>
                   
               </div>
@@ -4975,12 +5199,50 @@
       
       
       
-      <div class='message tool_use paired-message pair_first session-test_session d-6' data-message-id='d-7' id='msg-d-7-first'>
+      <div class='message tool_use paired-message pair_first session-test_session d-6' data-message-id='d-7' id='msg-d-7-first' data-raw-json='{
+    &#34;type&#34;: &#34;assistant&#34;,
+    &#34;timestamp&#34;: &#34;2025-07-03T16:04:07.874907Z&#34;,
+    &#34;parentUuid&#34;: null,
+    &#34;isSidechain&#34;: false,
+    &#34;userType&#34;: &#34;human&#34;,
+    &#34;cwd&#34;: &#34;/tmp&#34;,
+    &#34;sessionId&#34;: &#34;test_session&#34;,
+    &#34;version&#34;: &#34;1.0.0&#34;,
+    &#34;uuid&#34;: &#34;msg_008&#34;,
+    &#34;requestId&#34;: &#34;req_004&#34;,
+    &#34;message&#34;: {
+      &#34;id&#34;: &#34;msg_008&#34;,
+      &#34;type&#34;: &#34;message&#34;,
+      &#34;role&#34;: &#34;assistant&#34;,
+      &#34;model&#34;: &#34;claude-3-sonnet-20240229&#34;,
+      &#34;content&#34;: [
+        {
+          &#34;type&#34;: &#34;tool_use&#34;,
+          &#34;id&#34;: &#34;tool_002&#34;,
+          &#34;name&#34;: &#34;Bash&#34;,
+          &#34;input&#34;: {
+            &#34;command&#34;: &#34;python /tmp/decorator_example.py&#34;,
+            &#34;description&#34;: &#34;Run the decorator example to show output&#34;
+          }
+        }
+      ],
+      &#34;stop_reason&#34;: &#34;tool_use&#34;,
+      &#34;stop_sequence&#34;: null,
+      &#34;usage&#34;: {
+        &#34;input_tokens&#34;: 25,
+        &#34;cache_creation_input_tokens&#34;: 0,
+        &#34;cache_read_input_tokens&#34;: 0,
+        &#34;output_tokens&#34;: 35,
+        &#34;service_tier&#34;: &#34;standard&#34;
+      }
+    }
+  }'>
           <div class='header'>
               <span title="ID: tool_002">🛠️ Bash <span class='tool-summary'>Run the decorator example to show output</span></span>
               <div class='header-info'>
                   <div class='timestamp-row'>
                       <span class='timestamp' data-timestamp='2025-07-03T16:04:07.874907Z'>2025-07-03 16:04:07</span>
+                      
                   </div>
                   
               </div>
@@ -4992,12 +5254,37 @@
       
       
       
-      <div class='message tool_result paired-message pair_last session-test_session d-6' data-message-id='d-8' id='msg-d-8-last'>
+      <div class='message tool_result paired-message pair_last session-test_session d-6' data-message-id='d-8' id='msg-d-8-last' data-raw-json='{
+    &#34;type&#34;: &#34;user&#34;,
+    &#34;timestamp&#34;: &#34;2025-07-03T16:06:07.874907Z&#34;,
+    &#34;parentUuid&#34;: null,
+    &#34;isSidechain&#34;: false,
+    &#34;userType&#34;: &#34;human&#34;,
+    &#34;cwd&#34;: &#34;/tmp&#34;,
+    &#34;sessionId&#34;: &#34;test_session&#34;,
+    &#34;version&#34;: &#34;1.0.0&#34;,
+    &#34;uuid&#34;: &#34;msg_009&#34;,
+    &#34;toolUseResult&#34;: &#34;Hello, Alice!\nHello, Alice!\nHello, Alice!&#34;,
+    &#34;message&#34;: {
+      &#34;role&#34;: &#34;user&#34;,
+      &#34;content&#34;: [
+        {
+          &#34;type&#34;: &#34;tool_result&#34;,
+          &#34;tool_use_id&#34;: &#34;tool_002&#34;,
+          &#34;content&#34;: &#34;Hello, Alice!\nHello, Alice!\nHello, Alice!&#34;,
+          &#34;is_error&#34;: false
+        }
+      ]
+    }
+  }' data-copyable-text='Hello, Alice!&amp;#10;Hello, Alice!&amp;#10;Hello, Alice!'>
           <div class='header'>
               <span title="ID: tool_002"></span>
               <div class='header-info'>
                   <div class='timestamp-row'>
                       <span class='timestamp' data-timestamp='2025-07-03T16:06:07.874907Z' data-duration='took 2m 0s'>2025-07-03 16:06:07</span>
+                      
+                      <button class='copy-json-btn' data-message-id='d-8' title='Copy message content'>📋</button>
+                      
                   </div>
                   
               </div>
@@ -5011,12 +5298,47 @@
       
       
       
-      <div class='message assistant session-test_session d-6' data-message-id='d-9' id='msg-d-9'>
+      <div class='message assistant session-test_session d-6' data-message-id='d-9' id='msg-d-9' data-raw-json='{
+    &#34;type&#34;: &#34;assistant&#34;,
+    &#34;timestamp&#34;: &#34;2025-07-03T16:08:07.874907Z&#34;,
+    &#34;parentUuid&#34;: null,
+    &#34;isSidechain&#34;: false,
+    &#34;userType&#34;: &#34;human&#34;,
+    &#34;cwd&#34;: &#34;/tmp&#34;,
+    &#34;sessionId&#34;: &#34;test_session&#34;,
+    &#34;version&#34;: &#34;1.0.0&#34;,
+    &#34;uuid&#34;: &#34;msg_010&#34;,
+    &#34;requestId&#34;: &#34;req_005&#34;,
+    &#34;message&#34;: {
+      &#34;id&#34;: &#34;msg_010&#34;,
+      &#34;type&#34;: &#34;message&#34;,
+      &#34;role&#34;: &#34;assistant&#34;,
+      &#34;model&#34;: &#34;claude-3-sonnet-20240229&#34;,
+      &#34;content&#34;: [
+        {
+          &#34;type&#34;: &#34;text&#34;,
+          &#34;text&#34;: &#34;Perfect! As you can see, the `@repeat(3)` decorator successfully made the `greet` function execute three times, printing \&#34;Hello, Alice!\&#34; three times.\n\nThis demonstrates the power of parameterized decorators - you can customize their behavior by passing arguments to the decorator factory. Some common use cases include:\n\n- **Timing decorators**: `@time_it(units=&amp;apos;ms&amp;apos;)`\n- **Retry decorators**: `@retry(max_attempts=3, delay=1)`\n- **Authentication decorators**: `@require_role(&amp;apos;admin&amp;apos;)`\n- **Caching decorators**: `@cache(ttl=300)`\n\nThe pattern is always the same: decorator factory \u2192 decorator \u2192 wrapper function.&#34;
+        }
+      ],
+      &#34;stop_reason&#34;: &#34;end_turn&#34;,
+      &#34;stop_sequence&#34;: null,
+      &#34;usage&#34;: {
+        &#34;input_tokens&#34;: 45,
+        &#34;cache_creation_input_tokens&#34;: 0,
+        &#34;cache_read_input_tokens&#34;: 0,
+        &#34;output_tokens&#34;: 110,
+        &#34;service_tier&#34;: &#34;standard&#34;
+      }
+    }
+  }' data-copyable-text='Perfect! As you can see, the `@repeat(3)` decorator successfully made the `greet` function execute three times, printing &#34;Hello, Alice!&#34; three times.&amp;#10;&amp;#10;This demonstrates the power of parameterized decorators - you can customize their behavior by passing arguments to the decorator factory. Some common use cases include:&amp;#10;&amp;#10;- **Timing decorators**: `@time_it(units=&amp;apos;ms&amp;apos;)`&amp;#10;- **Retry decorators**: `@retry(max_attempts=3, delay=1)`&amp;#10;- **Authentication decorators**: `@require_role(&amp;apos;admin&amp;apos;)`&amp;#10;- **Caching decorators**: `@cache(ttl=300)`&amp;#10;&amp;#10;The pattern is always the same: decorator factory → decorator → wrapper function.'>
           <div class='header'>
               <span>🤖 Assistant</span>
               <div class='header-info'>
                   <div class='timestamp-row'>
                       <span class='timestamp' data-timestamp='2025-07-03T16:08:07.874907Z'>2025-07-03 16:08:07</span>
+                      
+                      <button class='copy-json-btn' data-message-id='d-9' title='Copy message content'>📋</button>
+                      
                   </div>
                   
                   <span class='token-usage'>Input: 45 | Output: 110</span>
@@ -5039,12 +5361,34 @@
       
       
       
-      <div class='message user session-test_session' data-message-id='d-10' id='msg-d-10'>
+      <div class='message user session-test_session' data-message-id='d-10' id='msg-d-10' data-raw-json='{
+    &#34;type&#34;: &#34;user&#34;,
+    &#34;timestamp&#34;: &#34;2025-07-03T16:10:07.874907Z&#34;,
+    &#34;parentUuid&#34;: null,
+    &#34;isSidechain&#34;: false,
+    &#34;userType&#34;: &#34;human&#34;,
+    &#34;cwd&#34;: &#34;/tmp&#34;,
+    &#34;sessionId&#34;: &#34;test_session&#34;,
+    &#34;version&#34;: &#34;1.0.0&#34;,
+    &#34;uuid&#34;: &#34;msg_011&#34;,
+    &#34;message&#34;: {
+      &#34;role&#34;: &#34;user&#34;,
+      &#34;content&#34;: [
+        {
+          &#34;type&#34;: &#34;text&#34;,
+          &#34;text&#34;: &#34;This is really helpful! Let me try to implement a timing decorator myself. Can you help me if I get stuck?&#34;
+        }
+      ]
+    }
+  }' data-copyable-text='This is really helpful! Let me try to implement a timing decorator myself. Can you help me if I get stuck?'>
           <div class='header'>
               <span>🤷 User</span>
               <div class='header-info'>
                   <div class='timestamp-row'>
                       <span class='timestamp' data-timestamp='2025-07-03T16:10:07.874907Z'>2025-07-03 16:10:07</span>
+                      
+                      <button class='copy-json-btn' data-message-id='d-10' title='Copy message content'>📋</button>
+                      
                   </div>
                   
               </div>
@@ -5070,6 +5414,62 @@
               const selectNoneButton = document.getElementById('selectNone');
               const closeToolbarButton = document.getElementById('closeToolbar');
               const filterToggles = document.querySelectorAll('.filter-toggle');
+  
+              // Copy message content functionality
+              function copyJsonToClipboard(button) {
+                  const messageId = button.getAttribute('data-message-id');
+                  const messageDiv = document.getElementById('msg-' + messageId) ||
+                                     document.getElementById('msg-' + messageId + '-first') ||
+                                     document.getElementById('msg-' + messageId + '-last');
+  
+                  if (!messageDiv) {
+                      console.error('Message div not found for ID:', messageId);
+                      return;
+                  }
+  
+                  const copyableText = messageDiv.getAttribute('data-copyable-text');
+                  if (!copyableText) {
+                      console.error('No copyable text found for message:', messageId);
+                      return;
+                  }
+  
+                  // Decode HTML entities safely using DOMParser
+                  const parser = new DOMParser();
+                  const doc = parser.parseFromString(copyableText, 'text/html');
+                  const decodedText = doc.documentElement.textContent || '';
+  
+                  // Copy to clipboard
+                  navigator.clipboard.writeText(decodedText).then(function() {
+                      // Visual feedback
+                      const originalText = button.textContent;
+                      button.textContent = '✓';
+                      button.style.color = '#4caf50';
+  
+                      setTimeout(function() {
+                          button.textContent = originalText;
+                          button.style.color = '';
+                      }, 2000);
+                  }).catch(function(err) {
+                      console.error('Failed to copy:', err);
+                      // Fallback feedback
+                      const originalText = button.textContent;
+                      button.textContent = '✗';
+                      button.style.color = '#f44336';
+  
+                      setTimeout(function() {
+                          button.textContent = originalText;
+                          button.style.color = '';
+                      }, 2000);
+                  });
+              }
+  
+              // Attach copy button event listeners
+              document.querySelectorAll('.copy-json-btn').forEach(function(button) {
+                  button.addEventListener('click', function(e) {
+                      e.stopPropagation();
+                      copyJsonToClipboard(button);
+                  });
+              });
   
               // Timezone conversion (included as component)
               // Convert timestamps to user's timezone
@@ -7010,7 +7410,31 @@
   .timestamp-row {
       display: flex;
       flex-direction: row;
-      align-items: normal;
+      align-items: center;
+      gap: 0.5em;
+  }
+  
+  /* Copy JSON button styling */
+  .copy-json-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1em;
+      padding: 0.2em 0.4em;
+      border-radius: 3px;
+      transition: all 0.2s ease;
+      opacity: 0.5;
+  }
+  
+  .copy-json-btn:hover {
+      opacity: 1;
+      background-color: var(--highlight-dimmed);
+      transform: scale(1.1);
+  }
+  
+  .copy-json-btn:active {
+      transform: scale(0.95);
+  }
       gap: 8px;
   }
   
@@ -9519,12 +9943,34 @@
       
       
       
-      <div class='message user session-edge_cases' data-message-id='d-0' id='msg-d-0'>
+      <div class='message user session-edge_cases' data-message-id='d-0' id='msg-d-0' data-raw-json='{
+    &#34;type&#34;: &#34;user&#34;,
+    &#34;timestamp&#34;: &#34;2025-06-14T11:00:00Z&#34;,
+    &#34;parentUuid&#34;: null,
+    &#34;isSidechain&#34;: false,
+    &#34;userType&#34;: &#34;human&#34;,
+    &#34;cwd&#34;: &#34;/tmp&#34;,
+    &#34;sessionId&#34;: &#34;edge_cases&#34;,
+    &#34;version&#34;: &#34;1.0.0&#34;,
+    &#34;uuid&#34;: &#34;edge_001&#34;,
+    &#34;message&#34;: {
+      &#34;role&#34;: &#34;user&#34;,
+      &#34;content&#34;: [
+        {
+          &#34;type&#34;: &#34;text&#34;,
+          &#34;text&#34;: &#34;Here&amp;apos;s a message with some **markdown** formatting, `inline code`, and even a [link](https://example.com). Let&amp;apos;s see how it renders!&#34;
+        }
+      ]
+    }
+  }' data-copyable-text='Here&amp;apos;s a message with some **markdown** formatting, `inline code`, and even a [link](https://example.com). Let&amp;apos;s see how it renders!'>
           <div class='header'>
               <span>🤷 User</span>
               <div class='header-info'>
                   <div class='timestamp-row'>
                       <span class='timestamp' data-timestamp='2025-06-14T11:00:00Z'>2025-06-14 11:00:00</span>
+                      
+                      <button class='copy-json-btn' data-message-id='d-0' title='Copy message content'>📋</button>
+                      
                   </div>
                   
               </div>
@@ -9546,12 +9992,47 @@
       
       
       
-      <div class='message assistant session-edge_cases d-0' data-message-id='d-1' id='msg-d-1'>
+      <div class='message assistant session-edge_cases d-0' data-message-id='d-1' id='msg-d-1' data-raw-json='{
+    &#34;type&#34;: &#34;assistant&#34;,
+    &#34;timestamp&#34;: &#34;2025-06-14T11:00:30Z&#34;,
+    &#34;parentUuid&#34;: null,
+    &#34;isSidechain&#34;: false,
+    &#34;userType&#34;: &#34;human&#34;,
+    &#34;cwd&#34;: &#34;/tmp&#34;,
+    &#34;sessionId&#34;: &#34;edge_cases&#34;,
+    &#34;version&#34;: &#34;1.0.0&#34;,
+    &#34;uuid&#34;: &#34;edge_002&#34;,
+    &#34;requestId&#34;: &#34;req_edge_001&#34;,
+    &#34;message&#34;: {
+      &#34;id&#34;: &#34;edge_002&#34;,
+      &#34;type&#34;: &#34;message&#34;,
+      &#34;role&#34;: &#34;assistant&#34;,
+      &#34;model&#34;: &#34;claude-3-sonnet-20240229&#34;,
+      &#34;content&#34;: [
+        {
+          &#34;type&#34;: &#34;text&#34;,
+          &#34;text&#34;: &#34;Great example! Markdown formatting is indeed supported. Here are some more examples:\n\n## Headers work too\n\n### Sublevel headers\n\n- Bullet points\n- **Bold text**\n- *Italic text*\n- `inline code`\n\n&gt; Block quotes look nice\n\n```python\n# Code blocks with syntax highlighting\ndef hello_world():\n    print(\&#34;Hello, world!\&#34;)\n    return 42\n```\n\n| Tables | Also | Work |\n|--------|------|------|\n| Cell 1 | Cell 2 | Cell 3 |\n| Data   | More  | Info  |\n\nThe markdown renderer handles all of this automatically!&#34;
+        }
+      ],
+      &#34;stop_reason&#34;: &#34;end_turn&#34;,
+      &#34;stop_sequence&#34;: null,
+      &#34;usage&#34;: {
+        &#34;input_tokens&#34;: 35,
+        &#34;cache_creation_input_tokens&#34;: 0,
+        &#34;cache_read_input_tokens&#34;: 0,
+        &#34;output_tokens&#34;: 145,
+        &#34;service_tier&#34;: &#34;standard&#34;
+      }
+    }
+  }' data-copyable-text='Great example! Markdown formatting is indeed supported. Here are some more examples:&amp;#10;&amp;#10;## Headers work too&amp;#10;&amp;#10;### Sublevel headers&amp;#10;&amp;#10;- Bullet points&amp;#10;- **Bold text**&amp;#10;- *Italic text*&amp;#10;- `inline code`&amp;#10;&amp;#10;&gt; Block quotes look nice&amp;#10;&amp;#10;```python&amp;#10;# Code blocks with syntax highlighting&amp;#10;def hello_world():&amp;#10;    print(&#34;Hello, world!&#34;)&amp;#10;    return 42&amp;#10;```&amp;#10;&amp;#10;| Tables | Also | Work |&amp;#10;|--------|------|------|&amp;#10;| Cell 1 | Cell 2 | Cell 3 |&amp;#10;| Data   | More  | Info  |&amp;#10;&amp;#10;The markdown renderer handles all of this automatically!'>
           <div class='header'>
               <span>🤖 Assistant</span>
               <div class='header-info'>
                   <div class='timestamp-row'>
                       <span class='timestamp' data-timestamp='2025-06-14T11:00:30Z'>2025-06-14 11:00:30</span>
+                      
+                      <button class='copy-json-btn' data-message-id='d-1' title='Copy message content'>📋</button>
+                      
                   </div>
                   
                   <span class='token-usage'>Input: 35 | Output: 145</span>
@@ -9604,12 +10085,34 @@
       
       
       
-      <div class='message user session-edge_cases' data-message-id='d-2' id='msg-d-2'>
+      <div class='message user session-edge_cases' data-message-id='d-2' id='msg-d-2' data-raw-json='{
+    &#34;type&#34;: &#34;user&#34;,
+    &#34;timestamp&#34;: &#34;2025-06-14T11:01:00Z&#34;,
+    &#34;parentUuid&#34;: null,
+    &#34;isSidechain&#34;: false,
+    &#34;userType&#34;: &#34;human&#34;,
+    &#34;cwd&#34;: &#34;/tmp&#34;,
+    &#34;sessionId&#34;: &#34;edge_cases&#34;,
+    &#34;version&#34;: &#34;1.0.0&#34;,
+    &#34;uuid&#34;: &#34;edge_003&#34;,
+    &#34;message&#34;: {
+      &#34;role&#34;: &#34;user&#34;,
+      &#34;content&#34;: [
+        {
+          &#34;type&#34;: &#34;text&#34;,
+          &#34;text&#34;: &#34;Let&amp;apos;s test a very long message to see how it handles text wrapping and layout. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.&#34;
+        }
+      ]
+    }
+  }' data-copyable-text='Let&amp;apos;s test a very long message to see how it handles text wrapping and layout. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.'>
           <div class='header'>
               <span>🤷 User</span>
               <div class='header-info'>
                   <div class='timestamp-row'>
                       <span class='timestamp' data-timestamp='2025-06-14T11:01:00Z'>2025-06-14 11:01:00</span>
+                      
+                      <button class='copy-json-btn' data-message-id='d-2' title='Copy message content'>📋</button>
+                      
                   </div>
                   
               </div>
@@ -9635,12 +10138,49 @@
       
       
       
-      <div class='message tool_use paired-message pair_first session-edge_cases d-2' data-message-id='d-3' id='msg-d-3-first'>
+      <div class='message tool_use paired-message pair_first session-edge_cases d-2' data-message-id='d-3' id='msg-d-3-first' data-raw-json='{
+    &#34;type&#34;: &#34;assistant&#34;,
+    &#34;timestamp&#34;: &#34;2025-06-14T11:01:30Z&#34;,
+    &#34;parentUuid&#34;: null,
+    &#34;isSidechain&#34;: false,
+    &#34;userType&#34;: &#34;human&#34;,
+    &#34;cwd&#34;: &#34;/tmp&#34;,
+    &#34;sessionId&#34;: &#34;edge_cases&#34;,
+    &#34;version&#34;: &#34;1.0.0&#34;,
+    &#34;uuid&#34;: &#34;edge_004&#34;,
+    &#34;requestId&#34;: &#34;req_edge_002&#34;,
+    &#34;message&#34;: {
+      &#34;id&#34;: &#34;edge_004&#34;,
+      &#34;type&#34;: &#34;message&#34;,
+      &#34;role&#34;: &#34;assistant&#34;,
+      &#34;model&#34;: &#34;claude-3-sonnet-20240229&#34;,
+      &#34;content&#34;: [
+        {
+          &#34;type&#34;: &#34;tool_use&#34;,
+          &#34;id&#34;: &#34;tool_edge_001&#34;,
+          &#34;name&#34;: &#34;FailingTool&#34;,
+          &#34;input&#34;: {
+            &#34;test_param&#34;: &#34;This tool will fail to demonstrate error handling&#34;
+          }
+        }
+      ],
+      &#34;stop_reason&#34;: &#34;tool_use&#34;,
+      &#34;stop_sequence&#34;: null,
+      &#34;usage&#34;: {
+        &#34;input_tokens&#34;: 200,
+        &#34;cache_creation_input_tokens&#34;: 0,
+        &#34;cache_read_input_tokens&#34;: 0,
+        &#34;output_tokens&#34;: 25,
+        &#34;service_tier&#34;: &#34;standard&#34;
+      }
+    }
+  }'>
           <div class='header'>
               <span title="ID: tool_edge_001">🛠️ FailingTool</span>
               <div class='header-info'>
                   <div class='timestamp-row'>
                       <span class='timestamp' data-timestamp='2025-06-14T11:01:30Z'>2025-06-14 11:01:30</span>
+                      
                   </div>
                   
               </div>
@@ -9657,12 +10197,37 @@
       
       
       
-      <div class='message tool_result error paired-message pair_last session-edge_cases d-2' data-message-id='d-4' id='msg-d-4-last'>
+      <div class='message tool_result error paired-message pair_last session-edge_cases d-2' data-message-id='d-4' id='msg-d-4-last' data-raw-json='{
+    &#34;type&#34;: &#34;user&#34;,
+    &#34;timestamp&#34;: &#34;2025-06-14T11:01:31Z&#34;,
+    &#34;parentUuid&#34;: null,
+    &#34;isSidechain&#34;: false,
+    &#34;userType&#34;: &#34;human&#34;,
+    &#34;cwd&#34;: &#34;/tmp&#34;,
+    &#34;sessionId&#34;: &#34;edge_cases&#34;,
+    &#34;version&#34;: &#34;1.0.0&#34;,
+    &#34;uuid&#34;: &#34;edge_005&#34;,
+    &#34;toolUseResult&#34;: &#34;Error: Tool execution failed with error: Command not found&#34;,
+    &#34;message&#34;: {
+      &#34;role&#34;: &#34;user&#34;,
+      &#34;content&#34;: [
+        {
+          &#34;type&#34;: &#34;tool_result&#34;,
+          &#34;tool_use_id&#34;: &#34;tool_edge_001&#34;,
+          &#34;content&#34;: &#34;Error: Tool execution failed with error: Command not found&#34;,
+          &#34;is_error&#34;: true
+        }
+      ]
+    }
+  }' data-copyable-text='Error: Tool execution failed with error: Command not found'>
           <div class='header'>
               <span title="ID: tool_edge_001">🚨 Error</span>
               <div class='header-info'>
                   <div class='timestamp-row'>
                       <span class='timestamp' data-timestamp='2025-06-14T11:01:31Z' data-duration='took 1.0s'>2025-06-14 11:01:31</span>
+                      
+                      <button class='copy-json-btn' data-message-id='d-4' title='Copy message content'>📋</button>
+                      
                   </div>
                   
               </div>
@@ -9674,12 +10239,34 @@
       
       
       
-      <div class='message system paired-message pair_first session-edge_cases d-2' data-message-id='d-5' id='msg-d-5-first'>
+      <div class='message system paired-message pair_first session-edge_cases d-2' data-message-id='d-5' id='msg-d-5-first' data-raw-json='{
+    &#34;type&#34;: &#34;user&#34;,
+    &#34;timestamp&#34;: &#34;2025-06-14T11:02:10Z&#34;,
+    &#34;parentUuid&#34;: null,
+    &#34;isSidechain&#34;: false,
+    &#34;userType&#34;: &#34;human&#34;,
+    &#34;cwd&#34;: &#34;/tmp&#34;,
+    &#34;sessionId&#34;: &#34;edge_cases&#34;,
+    &#34;version&#34;: &#34;1.0.0&#34;,
+    &#34;uuid&#34;: &#34;edge_007&#34;,
+    &#34;message&#34;: {
+      &#34;role&#34;: &#34;user&#34;,
+      &#34;content&#34;: [
+        {
+          &#34;type&#34;: &#34;text&#34;,
+          &#34;text&#34;: &#34;&lt;command-name&gt;test-command&lt;/command-name&gt;&lt;command-args&gt;--verbose --output /tmp/test.log&lt;/command-args&gt;&lt;command-message&gt;Running a test command to verify system functionality&lt;/command-message&gt;&lt;command-contents&gt;{\&#34;text\&#34;: \&#34;This is the actual command content with some JSON structure and escaped characters: \\\&#34;quotes\\\&#34; and \\nline breaks\\n\&#34;}&lt;/command-contents&gt;&#34;
+        }
+      ]
+    }
+  }' data-copyable-text='&lt;command-name&gt;test-command&lt;/command-name&gt;&lt;command-args&gt;--verbose --output /tmp/test.log&lt;/command-args&gt;&lt;command-message&gt;Running a test command to verify system functionality&lt;/command-message&gt;&lt;command-contents&gt;{&#34;text&#34;: &#34;This is the actual command content with some JSON structure and escaped characters: \&#34;quotes\&#34; and \nline breaks\n&#34;}&lt;/command-contents&gt;'>
           <div class='header'>
               <span>⚙️ System</span>
               <div class='header-info'>
                   <div class='timestamp-row'>
                       <span class='timestamp' data-timestamp='2025-06-14T11:02:10Z'>2025-06-14 11:02:10</span>
+                      
+                      <button class='copy-json-btn' data-message-id='d-5' title='Copy message content'>📋</button>
+                      
                   </div>
                   
               </div>
@@ -9693,12 +10280,34 @@
       
       
       
-      <div class='message system command-output paired-message pair_last session-edge_cases d-2' data-message-id='d-6' id='msg-d-6-last'>
+      <div class='message system command-output paired-message pair_last session-edge_cases d-2' data-message-id='d-6' id='msg-d-6-last' data-raw-json='{
+    &#34;type&#34;: &#34;user&#34;,
+    &#34;timestamp&#34;: &#34;2025-06-14T11:02:20Z&#34;,
+    &#34;parentUuid&#34;: null,
+    &#34;isSidechain&#34;: false,
+    &#34;userType&#34;: &#34;human&#34;,
+    &#34;cwd&#34;: &#34;/tmp&#34;,
+    &#34;sessionId&#34;: &#34;edge_cases&#34;,
+    &#34;version&#34;: &#34;1.0.0&#34;,
+    &#34;uuid&#34;: &#34;edge_008&#34;,
+    &#34;message&#34;: {
+      &#34;role&#34;: &#34;user&#34;,
+      &#34;content&#34;: [
+        {
+          &#34;type&#34;: &#34;text&#34;,
+          &#34;text&#34;: &#34;&lt;local-command-stdout&gt;Command output here:\nLine 1 of output\nLine 2 of output\nSome data: 12345\nStatus: SUCCESS\nTimestamp: 2025-06-14T11:02:20Z&lt;/local-command-stdout&gt;&#34;
+        }
+      ]
+    }
+  }' data-copyable-text='&lt;local-command-stdout&gt;Command output here:&amp;#10;Line 1 of output&amp;#10;Line 2 of output&amp;#10;Some data: 12345&amp;#10;Status: SUCCESS&amp;#10;Timestamp: 2025-06-14T11:02:20Z&lt;/local-command-stdout&gt;'>
           <div class='header'>
               <span>System</span>
               <div class='header-info'>
                   <div class='timestamp-row'>
                       <span class='timestamp' data-timestamp='2025-06-14T11:02:20Z'>2025-06-14 11:02:20</span>
+                      
+                      <button class='copy-json-btn' data-message-id='d-6' title='Copy message content'>📋</button>
+                      
                   </div>
                   
               </div>
@@ -9715,12 +10324,61 @@
       
       
       
-      <div class='message assistant session-edge_cases d-2' data-message-id='d-7' id='msg-d-7'>
+      <div class='message assistant session-edge_cases d-2' data-message-id='d-7' id='msg-d-7' data-raw-json='{
+    &#34;type&#34;: &#34;assistant&#34;,
+    &#34;timestamp&#34;: &#34;2025-06-14T11:03:00Z&#34;,
+    &#34;parentUuid&#34;: null,
+    &#34;isSidechain&#34;: false,
+    &#34;userType&#34;: &#34;human&#34;,
+    &#34;cwd&#34;: &#34;/tmp&#34;,
+    &#34;sessionId&#34;: &#34;edge_cases&#34;,
+    &#34;version&#34;: &#34;1.0.0&#34;,
+    &#34;uuid&#34;: &#34;edge_009&#34;,
+    &#34;requestId&#34;: &#34;req_edge_003&#34;,
+    &#34;message&#34;: {
+      &#34;id&#34;: &#34;edge_009&#34;,
+      &#34;type&#34;: &#34;message&#34;,
+      &#34;role&#34;: &#34;assistant&#34;,
+      &#34;model&#34;: &#34;claude-3-sonnet-20240229&#34;,
+      &#34;content&#34;: [
+        {
+          &#34;type&#34;: &#34;text&#34;,
+          &#34;text&#34;: &#34;I see the long Lorem ipsum text wraps nicely! Long text handling is important for readability. The CSS should handle word wrapping automatically.&#34;
+        },
+        {
+          &#34;type&#34;: &#34;tool_use&#34;,
+          &#34;id&#34;: &#34;tool_edge_002&#34;,
+          &#34;name&#34;: &#34;MultiEdit&#34;,
+          &#34;input&#34;: {
+            &#34;file_path&#34;: &#34;/tmp/complex_example.py&#34;,
+            &#34;edits&#34;: [
+              {
+                &#34;old_string&#34;: &#34;&#34;,
+                &#34;new_string&#34;: &#34;#!/usr/bin/env python3\n\&#34;\&#34;\&#34;\nComplex example with multiple operations.\n\&#34;\&#34;\&#34;\n\nimport json\nimport sys\nfrom typing import List, Dict, Any\n\ndef process_data(items: List[Dict[str, Any]]) -&gt; None:\n    \&#34;\&#34;\&#34;\n    Process a list of data items.\n    \&#34;\&#34;\&#34;\n    for item in items:\n        print(f\&#34;Processing: {item[&amp;apos;name&amp;apos;]}\&#34;)\n        if item.get(&amp;apos;active&amp;apos;, False):\n            print(f\&#34;  Status: Active\&#34;)\n        else:\n            print(f\&#34;  Status: Inactive\&#34;)\n\nif __name__ == \&#34;__main__\&#34;:\n    sample_data = [\n        {\&#34;name\&#34;: \&#34;Item 1\&#34;, \&#34;active\&#34;: True},\n        {\&#34;name\&#34;: \&#34;Item 2\&#34;, \&#34;active\&#34;: False},\n        {\&#34;name\&#34;: \&#34;Item 3\&#34;, \&#34;active\&#34;: True}\n    ]\n    process_data(sample_data)&#34;
+              }
+            ]
+          }
+        }
+      ],
+      &#34;stop_reason&#34;: &#34;tool_use&#34;,
+      &#34;stop_sequence&#34;: null,
+      &#34;usage&#34;: {
+        &#34;input_tokens&#34;: 85,
+        &#34;cache_creation_input_tokens&#34;: 0,
+        &#34;cache_read_input_tokens&#34;: 0,
+        &#34;output_tokens&#34;: 180,
+        &#34;service_tier&#34;: &#34;standard&#34;
+      }
+    }
+  }' data-copyable-text='I see the long Lorem ipsum text wraps nicely! Long text handling is important for readability. The CSS should handle word wrapping automatically.'>
           <div class='header'>
               <span>🤖 Assistant</span>
               <div class='header-info'>
                   <div class='timestamp-row'>
                       <span class='timestamp' data-timestamp='2025-06-14T11:03:00Z'>2025-06-14 11:03:00</span>
+                      
+                      <button class='copy-json-btn' data-message-id='d-7' title='Copy message content'>📋</button>
+                      
                   </div>
                   
                   <span class='token-usage'>Input: 85 | Output: 180</span>
@@ -9745,12 +10403,59 @@
       
       
       
-      <div class='message tool_use session-edge_cases d-2 d-7' data-message-id='d-8' id='msg-d-8'>
+      <div class='message tool_use session-edge_cases d-2 d-7' data-message-id='d-8' id='msg-d-8' data-raw-json='{
+    &#34;type&#34;: &#34;assistant&#34;,
+    &#34;timestamp&#34;: &#34;2025-06-14T11:03:00Z&#34;,
+    &#34;parentUuid&#34;: null,
+    &#34;isSidechain&#34;: false,
+    &#34;userType&#34;: &#34;human&#34;,
+    &#34;cwd&#34;: &#34;/tmp&#34;,
+    &#34;sessionId&#34;: &#34;edge_cases&#34;,
+    &#34;version&#34;: &#34;1.0.0&#34;,
+    &#34;uuid&#34;: &#34;edge_009&#34;,
+    &#34;requestId&#34;: &#34;req_edge_003&#34;,
+    &#34;message&#34;: {
+      &#34;id&#34;: &#34;edge_009&#34;,
+      &#34;type&#34;: &#34;message&#34;,
+      &#34;role&#34;: &#34;assistant&#34;,
+      &#34;model&#34;: &#34;claude-3-sonnet-20240229&#34;,
+      &#34;content&#34;: [
+        {
+          &#34;type&#34;: &#34;text&#34;,
+          &#34;text&#34;: &#34;I see the long Lorem ipsum text wraps nicely! Long text handling is important for readability. The CSS should handle word wrapping automatically.&#34;
+        },
+        {
+          &#34;type&#34;: &#34;tool_use&#34;,
+          &#34;id&#34;: &#34;tool_edge_002&#34;,
+          &#34;name&#34;: &#34;MultiEdit&#34;,
+          &#34;input&#34;: {
+            &#34;file_path&#34;: &#34;/tmp/complex_example.py&#34;,
+            &#34;edits&#34;: [
+              {
+                &#34;old_string&#34;: &#34;&#34;,
+                &#34;new_string&#34;: &#34;#!/usr/bin/env python3\n\&#34;\&#34;\&#34;\nComplex example with multiple operations.\n\&#34;\&#34;\&#34;\n\nimport json\nimport sys\nfrom typing import List, Dict, Any\n\ndef process_data(items: List[Dict[str, Any]]) -&gt; None:\n    \&#34;\&#34;\&#34;\n    Process a list of data items.\n    \&#34;\&#34;\&#34;\n    for item in items:\n        print(f\&#34;Processing: {item[&amp;apos;name&amp;apos;]}\&#34;)\n        if item.get(&amp;apos;active&amp;apos;, False):\n            print(f\&#34;  Status: Active\&#34;)\n        else:\n            print(f\&#34;  Status: Inactive\&#34;)\n\nif __name__ == \&#34;__main__\&#34;:\n    sample_data = [\n        {\&#34;name\&#34;: \&#34;Item 1\&#34;, \&#34;active\&#34;: True},\n        {\&#34;name\&#34;: \&#34;Item 2\&#34;, \&#34;active\&#34;: False},\n        {\&#34;name\&#34;: \&#34;Item 3\&#34;, \&#34;active\&#34;: True}\n    ]\n    process_data(sample_data)&#34;
+              }
+            ]
+          }
+        }
+      ],
+      &#34;stop_reason&#34;: &#34;tool_use&#34;,
+      &#34;stop_sequence&#34;: null,
+      &#34;usage&#34;: {
+        &#34;input_tokens&#34;: 85,
+        &#34;cache_creation_input_tokens&#34;: 0,
+        &#34;cache_read_input_tokens&#34;: 0,
+        &#34;output_tokens&#34;: 180,
+        &#34;service_tier&#34;: &#34;standard&#34;
+      }
+    }
+  }'>
           <div class='header'>
               <span title="ID: tool_edge_002">🛠️ MultiEdit</span>
               <div class='header-info'>
                   <div class='timestamp-row'>
                       <span class='timestamp' data-timestamp='2025-06-14T11:03:00Z'>2025-06-14 11:03:00</span>
+                      
                   </div>
                   
               </div>
@@ -9785,12 +10490,34 @@
       
       
       
-      <div class='message user session-edge_cases' data-message-id='d-9' id='msg-d-9'>
+      <div class='message user session-edge_cases' data-message-id='d-9' id='msg-d-9' data-raw-json='{
+    &#34;type&#34;: &#34;user&#34;,
+    &#34;timestamp&#34;: &#34;2025-06-14T11:03:30Z&#34;,
+    &#34;parentUuid&#34;: null,
+    &#34;isSidechain&#34;: false,
+    &#34;userType&#34;: &#34;human&#34;,
+    &#34;cwd&#34;: &#34;/tmp&#34;,
+    &#34;sessionId&#34;: &#34;edge_cases&#34;,
+    &#34;version&#34;: &#34;1.0.0&#34;,
+    &#34;uuid&#34;: &#34;edge_011&#34;,
+    &#34;message&#34;: {
+      &#34;role&#34;: &#34;user&#34;,
+      &#34;content&#34;: [
+        {
+          &#34;type&#34;: &#34;text&#34;,
+          &#34;text&#34;: &#34;Testing special characters: caf\u00e9, na\u00efve, r\u00e9sum\u00e9, \u4e2d\u6587, \u0627\u0644\u0639\u0631\u0628\u064a\u0629, \u0440\u0443\u0441\u0441\u043a\u0438\u0439, \ud83c\udf89 emojis \ud83d\ude80 and symbols \u2211\u2206\u221a\u03c0\u221e&#34;
+        }
+      ]
+    }
+  }' data-copyable-text='Testing special characters: café, naïve, résumé, 中文, العربية, русский, 🎉 emojis 🚀 and symbols ∑∆√π∞'>
           <div class='header'>
               <span>🤷 User</span>
               <div class='header-info'>
                   <div class='timestamp-row'>
                       <span class='timestamp' data-timestamp='2025-06-14T11:03:30Z'>2025-06-14 11:03:30</span>
+                      
+                      <button class='copy-json-btn' data-message-id='d-9' title='Copy message content'>📋</button>
+                      
                   </div>
                   
               </div>
@@ -9802,12 +10529,32 @@
       
       
       
-      <div class='message user session-edge_cases' data-message-id='d-10' id='msg-d-10'>
+      <div class='message user session-edge_cases' data-message-id='d-10' id='msg-d-10' data-raw-json='{
+    &#34;type&#34;: &#34;user&#34;,
+    &#34;timestamp&#34;: &#34;2025-06-14T11:03:01Z&#34;,
+    &#34;parentUuid&#34;: null,
+    &#34;isSidechain&#34;: false,
+    &#34;userType&#34;: &#34;human&#34;,
+    &#34;cwd&#34;: &#34;/tmp&#34;,
+    &#34;sessionId&#34;: &#34;edge_cases&#34;,
+    &#34;version&#34;: &#34;1.0.0&#34;,
+    &#34;uuid&#34;: &#34;edge_010&#34;,
+    &#34;toolUseResult&#34;: &#34;File created successfully at: /tmp/complex_example.py&#34;,
+    &#34;message&#34;: {
+      &#34;role&#34;: &#34;user&#34;,
+      &#34;content&#34;: [
+        &#34;wow error&#34;
+      ]
+    }
+  }' data-copyable-text='wow error'>
           <div class='header'>
               <span>🤷 User</span>
               <div class='header-info'>
                   <div class='timestamp-row'>
                       <span class='timestamp' data-timestamp='2025-06-14T11:03:01Z'>2025-06-14 11:03:01</span>
+                      
+                      <button class='copy-json-btn' data-message-id='d-10' title='Copy message content'>📋</button>
+                      
                   </div>
                   
               </div>
@@ -9838,12 +10585,72 @@
       
       
       
-      <div class='message tool_use session-todowrite_session' data-message-id='d-11' id='msg-d-11'>
+      <div class='message tool_use session-todowrite_session' data-message-id='d-11' id='msg-d-11' data-raw-json='{
+    &#34;type&#34;: &#34;assistant&#34;,
+    &#34;message&#34;: {
+      &#34;id&#34;: &#34;msg_004&#34;,
+      &#34;type&#34;: &#34;message&#34;,
+      &#34;role&#34;: &#34;assistant&#34;,
+      &#34;model&#34;: &#34;claude-sonnet-4&#34;,
+      &#34;content&#34;: [
+        {
+          &#34;type&#34;: &#34;tool_use&#34;,
+          &#34;id&#34;: &#34;toolu_todowrite_002&#34;,
+          &#34;name&#34;: &#34;TodoWrite&#34;,
+          &#34;input&#34;: {
+            &#34;todos&#34;: [
+              &#34;broken_todo&#34;,
+              {
+                &#34;id&#34;: &#34;2&#34;,
+                &#34;content&#34;: &#34;Implement core functionality&#34;,
+                &#34;status&#34;: &#34;in_progress&#34;,
+                &#34;priority&#34;: &#34;high&#34;
+              },
+              {
+                &#34;id&#34;: &#34;3&#34;,
+                &#34;content&#34;: &#34;Add comprehensive tests&#34;,
+                &#34;status&#34;: &#34;pending&#34;,
+                &#34;priority&#34;: &#34;medium&#34;
+              },
+              {
+                &#34;id&#34;: &#34;4&#34;,
+                &#34;content&#34;: &#34;Write user documentation&#34;,
+                &#34;status&#34;: &#34;pending&#34;,
+                &#34;priority&#34;: &#34;low&#34;
+              },
+              {
+                &#34;id&#34;: &#34;5&#34;,
+                &#34;content&#34;: &#34;Perform code review&#34;,
+                &#34;status&#34;: &#34;pending&#34;,
+                &#34;priority&#34;: &#34;medium&#34;
+              }
+            ]
+          }
+        }
+      ],
+      &#34;stop_reason&#34;: null,
+      &#34;stop_sequence&#34;: null,
+      &#34;usage&#34;: {
+        &#34;input_tokens&#34;: 168,
+        &#34;output_tokens&#34;: 85
+      }
+    },
+    &#34;uuid&#34;: &#34;assistant_004&#34;,
+    &#34;timestamp&#34;: &#34;2025-06-14T10:02:00Z&#34;,
+    &#34;parentUuid&#34;: &#34;assistant_003&#34;,
+    &#34;isSidechain&#34;: false,
+    &#34;userType&#34;: &#34;external&#34;,
+    &#34;cwd&#34;: &#34;/tmp&#34;,
+    &#34;sessionId&#34;: &#34;todowrite_session&#34;,
+    &#34;version&#34;: &#34;1.0.24&#34;,
+    &#34;requestId&#34;: &#34;req_004&#34;
+  }'>
           <div class='header'>
               <span title="ID: toolu_todowrite_002">📝 Todo List</span>
               <div class='header-info'>
                   <div class='timestamp-row'>
                       <span class='timestamp' data-timestamp='2025-06-14T10:02:00Z'>2025-06-14 10:02:00</span>
+                      
                   </div>
                   
               </div>
@@ -9907,6 +10714,62 @@
               const selectNoneButton = document.getElementById('selectNone');
               const closeToolbarButton = document.getElementById('closeToolbar');
               const filterToggles = document.querySelectorAll('.filter-toggle');
+  
+              // Copy message content functionality
+              function copyJsonToClipboard(button) {
+                  const messageId = button.getAttribute('data-message-id');
+                  const messageDiv = document.getElementById('msg-' + messageId) ||
+                                     document.getElementById('msg-' + messageId + '-first') ||
+                                     document.getElementById('msg-' + messageId + '-last');
+  
+                  if (!messageDiv) {
+                      console.error('Message div not found for ID:', messageId);
+                      return;
+                  }
+  
+                  const copyableText = messageDiv.getAttribute('data-copyable-text');
+                  if (!copyableText) {
+                      console.error('No copyable text found for message:', messageId);
+                      return;
+                  }
+  
+                  // Decode HTML entities safely using DOMParser
+                  const parser = new DOMParser();
+                  const doc = parser.parseFromString(copyableText, 'text/html');
+                  const decodedText = doc.documentElement.textContent || '';
+  
+                  // Copy to clipboard
+                  navigator.clipboard.writeText(decodedText).then(function() {
+                      // Visual feedback
+                      const originalText = button.textContent;
+                      button.textContent = '✓';
+                      button.style.color = '#4caf50';
+  
+                      setTimeout(function() {
+                          button.textContent = originalText;
+                          button.style.color = '';
+                      }, 2000);
+                  }).catch(function(err) {
+                      console.error('Failed to copy:', err);
+                      // Fallback feedback
+                      const originalText = button.textContent;
+                      button.textContent = '✗';
+                      button.style.color = '#f44336';
+  
+                      setTimeout(function() {
+                          button.textContent = originalText;
+                          button.style.color = '';
+                      }, 2000);
+                  });
+              }
+  
+              // Attach copy button event listeners
+              document.querySelectorAll('.copy-json-btn').forEach(function(button) {
+                  button.addEventListener('click', function(e) {
+                      e.stopPropagation();
+                      copyJsonToClipboard(button);
+                  });
+              });
   
               // Timezone conversion (included as component)
               // Convert timestamps to user's timezone
@@ -11847,7 +12710,31 @@
   .timestamp-row {
       display: flex;
       flex-direction: row;
-      align-items: normal;
+      align-items: center;
+      gap: 0.5em;
+  }
+  
+  /* Copy JSON button styling */
+  .copy-json-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1em;
+      padding: 0.2em 0.4em;
+      border-radius: 3px;
+      transition: all 0.2s ease;
+      opacity: 0.5;
+  }
+  
+  .copy-json-btn:hover {
+      opacity: 1;
+      background-color: var(--highlight-dimmed);
+      transform: scale(1.1);
+  }
+  
+  .copy-json-btn:active {
+      transform: scale(0.95);
+  }
       gap: 8px;
   }
   
@@ -14356,12 +15243,34 @@
       
       
       
-      <div class='message user session-session_b' data-message-id='d-0' id='msg-d-0'>
+      <div class='message user session-session_b' data-message-id='d-0' id='msg-d-0' data-raw-json='{
+    &#34;type&#34;: &#34;user&#34;,
+    &#34;timestamp&#34;: &#34;2025-07-03T15:50:07.874717Z&#34;,
+    &#34;parentUuid&#34;: null,
+    &#34;isSidechain&#34;: false,
+    &#34;userType&#34;: &#34;human&#34;,
+    &#34;cwd&#34;: &#34;/tmp&#34;,
+    &#34;sessionId&#34;: &#34;session_b&#34;,
+    &#34;version&#34;: &#34;1.0.0&#34;,
+    &#34;uuid&#34;: &#34;session_b_001&#34;,
+    &#34;message&#34;: {
+      &#34;role&#34;: &#34;user&#34;,
+      &#34;content&#34;: [
+        {
+          &#34;type&#34;: &#34;text&#34;,
+          &#34;text&#34;: &#34;This is from a different session file to test multi-session handling.&#34;
+        }
+      ]
+    }
+  }' data-copyable-text='This is from a different session file to test multi-session handling.'>
           <div class='header'>
               <span>🤷 User</span>
               <div class='header-info'>
                   <div class='timestamp-row'>
                       <span class='timestamp' data-timestamp='2025-07-03T15:50:07.874717Z'>2025-07-03 15:50:07</span>
+                      
+                      <button class='copy-json-btn' data-message-id='d-0' title='Copy message content'>📋</button>
+                      
                   </div>
                   
               </div>
@@ -14383,12 +15292,47 @@
       
       
       
-      <div class='message assistant session-session_b d-0' data-message-id='d-1' id='msg-d-1'>
+      <div class='message assistant session-session_b d-0' data-message-id='d-1' id='msg-d-1' data-raw-json='{
+    &#34;type&#34;: &#34;assistant&#34;,
+    &#34;timestamp&#34;: &#34;2025-07-03T15:52:07.874717Z&#34;,
+    &#34;parentUuid&#34;: null,
+    &#34;isSidechain&#34;: false,
+    &#34;userType&#34;: &#34;human&#34;,
+    &#34;cwd&#34;: &#34;/tmp&#34;,
+    &#34;sessionId&#34;: &#34;session_b&#34;,
+    &#34;version&#34;: &#34;1.0.0&#34;,
+    &#34;uuid&#34;: &#34;session_b_002&#34;,
+    &#34;requestId&#34;: &#34;req_b_001&#34;,
+    &#34;message&#34;: {
+      &#34;id&#34;: &#34;session_b_002&#34;,
+      &#34;type&#34;: &#34;message&#34;,
+      &#34;role&#34;: &#34;assistant&#34;,
+      &#34;model&#34;: &#34;claude-3-sonnet-20240229&#34;,
+      &#34;content&#34;: [
+        {
+          &#34;type&#34;: &#34;text&#34;,
+          &#34;text&#34;: &#34;Indeed! This message is from a different JSONL file, which should help test the session divider logic. Only the first session should show a divider.&#34;
+        }
+      ],
+      &#34;stop_reason&#34;: &#34;end_turn&#34;,
+      &#34;stop_sequence&#34;: null,
+      &#34;usage&#34;: {
+        &#34;input_tokens&#34;: 20,
+        &#34;cache_creation_input_tokens&#34;: 0,
+        &#34;cache_read_input_tokens&#34;: 0,
+        &#34;output_tokens&#34;: 35,
+        &#34;service_tier&#34;: &#34;standard&#34;
+      }
+    }
+  }' data-copyable-text='Indeed! This message is from a different JSONL file, which should help test the session divider logic. Only the first session should show a divider.'>
           <div class='header'>
               <span>🤖 Assistant</span>
               <div class='header-info'>
                   <div class='timestamp-row'>
                       <span class='timestamp' data-timestamp='2025-07-03T15:52:07.874717Z'>2025-07-03 15:52:07</span>
+                      
+                      <button class='copy-json-btn' data-message-id='d-1' title='Copy message content'>📋</button>
+                      
                   </div>
                   
                   <span class='token-usage'>Input: 20 | Output: 35</span>
@@ -14403,12 +15347,34 @@
       
       
       
-      <div class='message user session-session_b' data-message-id='d-2' id='msg-d-2'>
+      <div class='message user session-session_b' data-message-id='d-2' id='msg-d-2' data-raw-json='{
+    &#34;type&#34;: &#34;user&#34;,
+    &#34;timestamp&#34;: &#34;2025-07-03T15:54:07.874717Z&#34;,
+    &#34;parentUuid&#34;: null,
+    &#34;isSidechain&#34;: false,
+    &#34;userType&#34;: &#34;human&#34;,
+    &#34;cwd&#34;: &#34;/tmp&#34;,
+    &#34;sessionId&#34;: &#34;session_b&#34;,
+    &#34;version&#34;: &#34;1.0.0&#34;,
+    &#34;uuid&#34;: &#34;session_b_003&#34;,
+    &#34;message&#34;: {
+      &#34;role&#34;: &#34;user&#34;,
+      &#34;content&#34;: [
+        {
+          &#34;type&#34;: &#34;text&#34;,
+          &#34;text&#34;: &#34;Perfect! This should appear without any session divider above it.&#34;
+        }
+      ]
+    }
+  }' data-copyable-text='Perfect! This should appear without any session divider above it.'>
           <div class='header'>
               <span>🤷 User</span>
               <div class='header-info'>
                   <div class='timestamp-row'>
                       <span class='timestamp' data-timestamp='2025-07-03T15:54:07.874717Z'>2025-07-03 15:54:07</span>
+                      
+                      <button class='copy-json-btn' data-message-id='d-2' title='Copy message content'>📋</button>
+                      
                   </div>
                   
               </div>
@@ -14443,12 +15409,34 @@
       
       
       
-      <div class='message user session-test_session' data-message-id='d-3' id='msg-d-3'>
+      <div class='message user session-test_session' data-message-id='d-3' id='msg-d-3' data-raw-json='{
+    &#34;type&#34;: &#34;user&#34;,
+    &#34;timestamp&#34;: &#34;2025-07-03T15:50:07.874907Z&#34;,
+    &#34;parentUuid&#34;: null,
+    &#34;isSidechain&#34;: false,
+    &#34;userType&#34;: &#34;human&#34;,
+    &#34;cwd&#34;: &#34;/tmp&#34;,
+    &#34;sessionId&#34;: &#34;test_session&#34;,
+    &#34;version&#34;: &#34;1.0.0&#34;,
+    &#34;uuid&#34;: &#34;msg_001&#34;,
+    &#34;message&#34;: {
+      &#34;role&#34;: &#34;user&#34;,
+      &#34;content&#34;: [
+        {
+          &#34;type&#34;: &#34;text&#34;,
+          &#34;text&#34;: &#34;Hello Claude! Can you help me understand how Python decorators work?&#34;
+        }
+      ]
+    }
+  }' data-copyable-text='Hello Claude! Can you help me understand how Python decorators work?'>
           <div class='header'>
               <span>🤷 User</span>
               <div class='header-info'>
                   <div class='timestamp-row'>
                       <span class='timestamp' data-timestamp='2025-07-03T15:50:07.874907Z'>2025-07-03 15:50:07</span>
+                      
+                      <button class='copy-json-btn' data-message-id='d-3' title='Copy message content'>📋</button>
+                      
                   </div>
                   
               </div>
@@ -14470,12 +15458,47 @@
       
       
       
-      <div class='message assistant session-test_session d-3' data-message-id='d-4' id='msg-d-4'>
+      <div class='message assistant session-test_session d-3' data-message-id='d-4' id='msg-d-4' data-raw-json='{
+    &#34;type&#34;: &#34;assistant&#34;,
+    &#34;timestamp&#34;: &#34;2025-07-03T15:52:07.874907Z&#34;,
+    &#34;parentUuid&#34;: null,
+    &#34;isSidechain&#34;: false,
+    &#34;userType&#34;: &#34;human&#34;,
+    &#34;cwd&#34;: &#34;/tmp&#34;,
+    &#34;sessionId&#34;: &#34;test_session&#34;,
+    &#34;version&#34;: &#34;1.0.0&#34;,
+    &#34;uuid&#34;: &#34;msg_002&#34;,
+    &#34;requestId&#34;: &#34;req_001&#34;,
+    &#34;message&#34;: {
+      &#34;id&#34;: &#34;msg_002&#34;,
+      &#34;type&#34;: &#34;message&#34;,
+      &#34;role&#34;: &#34;assistant&#34;,
+      &#34;model&#34;: &#34;claude-3-sonnet-20240229&#34;,
+      &#34;content&#34;: [
+        {
+          &#34;type&#34;: &#34;text&#34;,
+          &#34;text&#34;: &#34;I&amp;apos;d be happy to help you understand Python decorators! A decorator is a design pattern that allows you to modify or extend the behavior of functions or classes without permanently modifying their code.\n\nHere&amp;apos;s a simple example:\n\n```python\ndef my_decorator(func):\n    def wrapper():\n        print(\&#34;Something before the function\&#34;)\n        func()\n        print(\&#34;Something after the function\&#34;)\n    return wrapper\n\n@my_decorator\ndef say_hello():\n    print(\&#34;Hello!\&#34;)\n\nsay_hello()\n```\n\nThis will output:\n```\nSomething before the function\nHello!\nSomething after the function\n```&#34;
+        }
+      ],
+      &#34;stop_reason&#34;: &#34;end_turn&#34;,
+      &#34;stop_sequence&#34;: null,
+      &#34;usage&#34;: {
+        &#34;input_tokens&#34;: 25,
+        &#34;cache_creation_input_tokens&#34;: 0,
+        &#34;cache_read_input_tokens&#34;: 0,
+        &#34;output_tokens&#34;: 120,
+        &#34;service_tier&#34;: &#34;standard&#34;
+      }
+    }
+  }' data-copyable-text='I&amp;apos;d be happy to help you understand Python decorators! A decorator is a design pattern that allows you to modify or extend the behavior of functions or classes without permanently modifying their code.&amp;#10;&amp;#10;Here&amp;apos;s a simple example:&amp;#10;&amp;#10;```python&amp;#10;def my_decorator(func):&amp;#10;    def wrapper():&amp;#10;        print(&#34;Something before the function&#34;)&amp;#10;        func()&amp;#10;        print(&#34;Something after the function&#34;)&amp;#10;    return wrapper&amp;#10;&amp;#10;@my_decorator&amp;#10;def say_hello():&amp;#10;    print(&#34;Hello!&#34;)&amp;#10;&amp;#10;say_hello()&amp;#10;```&amp;#10;&amp;#10;This will output:&amp;#10;```&amp;#10;Something before the function&amp;#10;Hello!&amp;#10;Something after the function&amp;#10;```'>
           <div class='header'>
               <span>🤖 Assistant</span>
               <div class='header-info'>
                   <div class='timestamp-row'>
                       <span class='timestamp' data-timestamp='2025-07-03T15:52:07.874907Z'>2025-07-03 15:52:07</span>
+                      
+                      <button class='copy-json-btn' data-message-id='d-4' title='Copy message content'>📋</button>
+                      
                   </div>
                   
                   <span class='token-usage'>Input: 25 | Output: 120</span>
@@ -14509,12 +15532,34 @@
       
       
       
-      <div class='message user session-test_session' data-message-id='d-5' id='msg-d-5'>
+      <div class='message user session-test_session' data-message-id='d-5' id='msg-d-5' data-raw-json='{
+    &#34;type&#34;: &#34;user&#34;,
+    &#34;timestamp&#34;: &#34;2025-07-03T15:54:07.874907Z&#34;,
+    &#34;parentUuid&#34;: null,
+    &#34;isSidechain&#34;: false,
+    &#34;userType&#34;: &#34;human&#34;,
+    &#34;cwd&#34;: &#34;/tmp&#34;,
+    &#34;sessionId&#34;: &#34;test_session&#34;,
+    &#34;version&#34;: &#34;1.0.0&#34;,
+    &#34;uuid&#34;: &#34;msg_003&#34;,
+    &#34;message&#34;: {
+      &#34;role&#34;: &#34;user&#34;,
+      &#34;content&#34;: [
+        {
+          &#34;type&#34;: &#34;text&#34;,
+          &#34;text&#34;: &#34;Great! Can you also show me how to create a decorator that takes parameters?&#34;
+        }
+      ]
+    }
+  }' data-copyable-text='Great! Can you also show me how to create a decorator that takes parameters?'>
           <div class='header'>
               <span>🤷 User</span>
               <div class='header-info'>
                   <div class='timestamp-row'>
                       <span class='timestamp' data-timestamp='2025-07-03T15:54:07.874907Z'>2025-07-03 15:54:07</span>
+                      
+                      <button class='copy-json-btn' data-message-id='d-5' title='Copy message content'>📋</button>
+                      
                   </div>
                   
               </div>
@@ -14536,12 +15581,51 @@
       
       
       
-      <div class='message tool_use paired-message pair_first session-test_session d-5' data-message-id='d-6' id='msg-d-6-first'>
+      <div class='message tool_use paired-message pair_first session-test_session d-5' data-message-id='d-6' id='msg-d-6-first' data-raw-json='{
+    &#34;type&#34;: &#34;assistant&#34;,
+    &#34;timestamp&#34;: &#34;2025-07-03T15:56:07.874907Z&#34;,
+    &#34;parentUuid&#34;: null,
+    &#34;isSidechain&#34;: false,
+    &#34;userType&#34;: &#34;human&#34;,
+    &#34;cwd&#34;: &#34;/tmp&#34;,
+    &#34;sessionId&#34;: &#34;test_session&#34;,
+    &#34;version&#34;: &#34;1.0.0&#34;,
+    &#34;uuid&#34;: &#34;msg_004&#34;,
+    &#34;requestId&#34;: &#34;req_002&#34;,
+    &#34;message&#34;: {
+      &#34;id&#34;: &#34;msg_004&#34;,
+      &#34;type&#34;: &#34;message&#34;,
+      &#34;role&#34;: &#34;assistant&#34;,
+      &#34;model&#34;: &#34;claude-3-sonnet-20240229&#34;,
+      &#34;content&#34;: [
+        {
+          &#34;type&#34;: &#34;tool_use&#34;,
+          &#34;id&#34;: &#34;tool_001&#34;,
+          &#34;name&#34;: &#34;Edit&#34;,
+          &#34;input&#34;: {
+            &#34;file_path&#34;: &#34;/tmp/decorator_example.py&#34;,
+            &#34;old_string&#34;: &#34;&#34;,
+            &#34;new_string&#34;: &#34;def repeat(times):\n    def decorator(func):\n        def wrapper(*args, **kwargs):\n            for _ in range(times):\n                result = func(*args, **kwargs)\n            return result\n        return wrapper\n    return decorator\n\n@repeat(3)\ndef greet(name):\n    print(f\&#34;Hello, {name}!\&#34;)\n\ngreet(\&#34;Alice\&#34;)&#34;
+          }
+        }
+      ],
+      &#34;stop_reason&#34;: &#34;tool_use&#34;,
+      &#34;stop_sequence&#34;: null,
+      &#34;usage&#34;: {
+        &#34;input_tokens&#34;: 45,
+        &#34;cache_creation_input_tokens&#34;: 0,
+        &#34;cache_read_input_tokens&#34;: 0,
+        &#34;output_tokens&#34;: 85,
+        &#34;service_tier&#34;: &#34;standard&#34;
+      }
+    }
+  }'>
           <div class='header'>
               <span title="ID: tool_001">📝 Edit <span class='tool-summary'>/tmp/decorator_example.py</span></span>
               <div class='header-info'>
                   <div class='timestamp-row'>
                       <span class='timestamp' data-timestamp='2025-07-03T15:56:07.874907Z'>2025-07-03 15:56:07</span>
+                      
                   </div>
                   
               </div>
@@ -14553,12 +15637,37 @@
       
       
       
-      <div class='message tool_result paired-message pair_last session-test_session d-5' data-message-id='d-7' id='msg-d-7-last'>
+      <div class='message tool_result paired-message pair_last session-test_session d-5' data-message-id='d-7' id='msg-d-7-last' data-raw-json='{
+    &#34;type&#34;: &#34;user&#34;,
+    &#34;timestamp&#34;: &#34;2025-07-03T15:58:07.874907Z&#34;,
+    &#34;parentUuid&#34;: null,
+    &#34;isSidechain&#34;: false,
+    &#34;userType&#34;: &#34;human&#34;,
+    &#34;cwd&#34;: &#34;/tmp&#34;,
+    &#34;sessionId&#34;: &#34;test_session&#34;,
+    &#34;version&#34;: &#34;1.0.0&#34;,
+    &#34;uuid&#34;: &#34;msg_005&#34;,
+    &#34;toolUseResult&#34;: &#34;File created successfully at: /tmp/decorator_example.py&#34;,
+    &#34;message&#34;: {
+      &#34;role&#34;: &#34;user&#34;,
+      &#34;content&#34;: [
+        {
+          &#34;type&#34;: &#34;tool_result&#34;,
+          &#34;tool_use_id&#34;: &#34;tool_001&#34;,
+          &#34;content&#34;: &#34;File created successfully at: /tmp/decorator_example.py&#34;,
+          &#34;is_error&#34;: false
+        }
+      ]
+    }
+  }' data-copyable-text='File created successfully at: /tmp/decorator_example.py'>
           <div class='header'>
               <span title="ID: tool_001"></span>
               <div class='header-info'>
                   <div class='timestamp-row'>
                       <span class='timestamp' data-timestamp='2025-07-03T15:58:07.874907Z' data-duration='took 2m 0s'>2025-07-03 15:58:07</span>
+                      
+                      <button class='copy-json-btn' data-message-id='d-7' title='Copy message content'>📋</button>
+                      
                   </div>
                   
               </div>
@@ -14570,12 +15679,47 @@
       
       
       
-      <div class='message assistant session-test_session d-5' data-message-id='d-8' id='msg-d-8'>
+      <div class='message assistant session-test_session d-5' data-message-id='d-8' id='msg-d-8' data-raw-json='{
+    &#34;type&#34;: &#34;assistant&#34;,
+    &#34;timestamp&#34;: &#34;2025-07-03T16:00:07.874907Z&#34;,
+    &#34;parentUuid&#34;: null,
+    &#34;isSidechain&#34;: false,
+    &#34;userType&#34;: &#34;human&#34;,
+    &#34;cwd&#34;: &#34;/tmp&#34;,
+    &#34;sessionId&#34;: &#34;test_session&#34;,
+    &#34;version&#34;: &#34;1.0.0&#34;,
+    &#34;uuid&#34;: &#34;msg_006&#34;,
+    &#34;requestId&#34;: &#34;req_003&#34;,
+    &#34;message&#34;: {
+      &#34;id&#34;: &#34;msg_006&#34;,
+      &#34;type&#34;: &#34;message&#34;,
+      &#34;role&#34;: &#34;assistant&#34;,
+      &#34;model&#34;: &#34;claude-3-sonnet-20240229&#34;,
+      &#34;content&#34;: [
+        {
+          &#34;type&#34;: &#34;text&#34;,
+          &#34;text&#34;: &#34;Perfect! I&amp;apos;ve created an example of a parameterized decorator. Here&amp;apos;s how it works:\n\n1. **`repeat(times)`** - This is the decorator factory that takes parameters\n2. **`decorator(func)`** - This is the actual decorator that gets returned\n3. **`wrapper(*args, **kwargs)`** - This is the wrapper function that does the work\n\nThe key insight is that we have **three levels of functions**:\n- The outermost function takes the decorator parameters\n- The middle function takes the function to be decorated\n- The innermost function is the actual wrapper that gets called\n\nWhen you run this code, it will print \&#34;Hello, Alice!\&#34; three times.&#34;
+        }
+      ],
+      &#34;stop_reason&#34;: &#34;end_turn&#34;,
+      &#34;stop_sequence&#34;: null,
+      &#34;usage&#34;: {
+        &#34;input_tokens&#34;: 78,
+        &#34;cache_creation_input_tokens&#34;: 0,
+        &#34;cache_read_input_tokens&#34;: 0,
+        &#34;output_tokens&#34;: 95,
+        &#34;service_tier&#34;: &#34;standard&#34;
+      }
+    }
+  }' data-copyable-text='Perfect! I&amp;apos;ve created an example of a parameterized decorator. Here&amp;apos;s how it works:&amp;#10;&amp;#10;1. **`repeat(times)`** - This is the decorator factory that takes parameters&amp;#10;2. **`decorator(func)`** - This is the actual decorator that gets returned&amp;#10;3. **`wrapper(*args, **kwargs)`** - This is the wrapper function that does the work&amp;#10;&amp;#10;The key insight is that we have **three levels of functions**:&amp;#10;- The outermost function takes the decorator parameters&amp;#10;- The middle function takes the function to be decorated&amp;#10;- The innermost function is the actual wrapper that gets called&amp;#10;&amp;#10;When you run this code, it will print &#34;Hello, Alice!&#34; three times.'>
           <div class='header'>
               <span>🤖 Assistant</span>
               <div class='header-info'>
                   <div class='timestamp-row'>
                       <span class='timestamp' data-timestamp='2025-07-03T16:00:07.874907Z'>2025-07-03 16:00:07</span>
+                      
+                      <button class='copy-json-btn' data-message-id='d-8' title='Copy message content'>📋</button>
+                      
                   </div>
                   
                   <span class='token-usage'>Input: 78 | Output: 95</span>
@@ -14602,12 +15746,34 @@
       
       
       
-      <div class='message user session-test_session' data-message-id='d-9' id='msg-d-9'>
+      <div class='message user session-test_session' data-message-id='d-9' id='msg-d-9' data-raw-json='{
+    &#34;type&#34;: &#34;user&#34;,
+    &#34;timestamp&#34;: &#34;2025-07-03T16:02:07.874907Z&#34;,
+    &#34;parentUuid&#34;: null,
+    &#34;isSidechain&#34;: false,
+    &#34;userType&#34;: &#34;human&#34;,
+    &#34;cwd&#34;: &#34;/tmp&#34;,
+    &#34;sessionId&#34;: &#34;test_session&#34;,
+    &#34;version&#34;: &#34;1.0.0&#34;,
+    &#34;uuid&#34;: &#34;msg_007&#34;,
+    &#34;message&#34;: {
+      &#34;role&#34;: &#34;user&#34;,
+      &#34;content&#34;: [
+        {
+          &#34;type&#34;: &#34;text&#34;,
+          &#34;text&#34;: &#34;Can you run that example to show the output?&#34;
+        }
+      ]
+    }
+  }' data-copyable-text='Can you run that example to show the output?'>
           <div class='header'>
               <span>🤷 User</span>
               <div class='header-info'>
                   <div class='timestamp-row'>
                       <span class='timestamp' data-timestamp='2025-07-03T16:02:07.874907Z'>2025-07-03 16:02:07</span>
+                      
+                      <button class='copy-json-btn' data-message-id='d-9' title='Copy message content'>📋</button>
+                      
                   </div>
                   
               </div>
@@ -14629,12 +15795,50 @@
       
       
       
-      <div class='message tool_use paired-message pair_first session-test_session d-9' data-message-id='d-10' id='msg-d-10-first'>
+      <div class='message tool_use paired-message pair_first session-test_session d-9' data-message-id='d-10' id='msg-d-10-first' data-raw-json='{
+    &#34;type&#34;: &#34;assistant&#34;,
+    &#34;timestamp&#34;: &#34;2025-07-03T16:04:07.874907Z&#34;,
+    &#34;parentUuid&#34;: null,
+    &#34;isSidechain&#34;: false,
+    &#34;userType&#34;: &#34;human&#34;,
+    &#34;cwd&#34;: &#34;/tmp&#34;,
+    &#34;sessionId&#34;: &#34;test_session&#34;,
+    &#34;version&#34;: &#34;1.0.0&#34;,
+    &#34;uuid&#34;: &#34;msg_008&#34;,
+    &#34;requestId&#34;: &#34;req_004&#34;,
+    &#34;message&#34;: {
+      &#34;id&#34;: &#34;msg_008&#34;,
+      &#34;type&#34;: &#34;message&#34;,
+      &#34;role&#34;: &#34;assistant&#34;,
+      &#34;model&#34;: &#34;claude-3-sonnet-20240229&#34;,
+      &#34;content&#34;: [
+        {
+          &#34;type&#34;: &#34;tool_use&#34;,
+          &#34;id&#34;: &#34;tool_002&#34;,
+          &#34;name&#34;: &#34;Bash&#34;,
+          &#34;input&#34;: {
+            &#34;command&#34;: &#34;python /tmp/decorator_example.py&#34;,
+            &#34;description&#34;: &#34;Run the decorator example to show output&#34;
+          }
+        }
+      ],
+      &#34;stop_reason&#34;: &#34;tool_use&#34;,
+      &#34;stop_sequence&#34;: null,
+      &#34;usage&#34;: {
+        &#34;input_tokens&#34;: 25,
+        &#34;cache_creation_input_tokens&#34;: 0,
+        &#34;cache_read_input_tokens&#34;: 0,
+        &#34;output_tokens&#34;: 35,
+        &#34;service_tier&#34;: &#34;standard&#34;
+      }
+    }
+  }'>
           <div class='header'>
               <span title="ID: tool_002">🛠️ Bash <span class='tool-summary'>Run the decorator example to show output</span></span>
               <div class='header-info'>
                   <div class='timestamp-row'>
                       <span class='timestamp' data-timestamp='2025-07-03T16:04:07.874907Z'>2025-07-03 16:04:07</span>
+                      
                   </div>
                   
               </div>
@@ -14646,12 +15850,37 @@
       
       
       
-      <div class='message tool_result paired-message pair_last session-test_session d-9' data-message-id='d-11' id='msg-d-11-last'>
+      <div class='message tool_result paired-message pair_last session-test_session d-9' data-message-id='d-11' id='msg-d-11-last' data-raw-json='{
+    &#34;type&#34;: &#34;user&#34;,
+    &#34;timestamp&#34;: &#34;2025-07-03T16:06:07.874907Z&#34;,
+    &#34;parentUuid&#34;: null,
+    &#34;isSidechain&#34;: false,
+    &#34;userType&#34;: &#34;human&#34;,
+    &#34;cwd&#34;: &#34;/tmp&#34;,
+    &#34;sessionId&#34;: &#34;test_session&#34;,
+    &#34;version&#34;: &#34;1.0.0&#34;,
+    &#34;uuid&#34;: &#34;msg_009&#34;,
+    &#34;toolUseResult&#34;: &#34;Hello, Alice!\nHello, Alice!\nHello, Alice!&#34;,
+    &#34;message&#34;: {
+      &#34;role&#34;: &#34;user&#34;,
+      &#34;content&#34;: [
+        {
+          &#34;type&#34;: &#34;tool_result&#34;,
+          &#34;tool_use_id&#34;: &#34;tool_002&#34;,
+          &#34;content&#34;: &#34;Hello, Alice!\nHello, Alice!\nHello, Alice!&#34;,
+          &#34;is_error&#34;: false
+        }
+      ]
+    }
+  }' data-copyable-text='Hello, Alice!&amp;#10;Hello, Alice!&amp;#10;Hello, Alice!'>
           <div class='header'>
               <span title="ID: tool_002"></span>
               <div class='header-info'>
                   <div class='timestamp-row'>
                       <span class='timestamp' data-timestamp='2025-07-03T16:06:07.874907Z' data-duration='took 2m 0s'>2025-07-03 16:06:07</span>
+                      
+                      <button class='copy-json-btn' data-message-id='d-11' title='Copy message content'>📋</button>
+                      
                   </div>
                   
               </div>
@@ -14665,12 +15894,47 @@
       
       
       
-      <div class='message assistant session-test_session d-9' data-message-id='d-12' id='msg-d-12'>
+      <div class='message assistant session-test_session d-9' data-message-id='d-12' id='msg-d-12' data-raw-json='{
+    &#34;type&#34;: &#34;assistant&#34;,
+    &#34;timestamp&#34;: &#34;2025-07-03T16:08:07.874907Z&#34;,
+    &#34;parentUuid&#34;: null,
+    &#34;isSidechain&#34;: false,
+    &#34;userType&#34;: &#34;human&#34;,
+    &#34;cwd&#34;: &#34;/tmp&#34;,
+    &#34;sessionId&#34;: &#34;test_session&#34;,
+    &#34;version&#34;: &#34;1.0.0&#34;,
+    &#34;uuid&#34;: &#34;msg_010&#34;,
+    &#34;requestId&#34;: &#34;req_005&#34;,
+    &#34;message&#34;: {
+      &#34;id&#34;: &#34;msg_010&#34;,
+      &#34;type&#34;: &#34;message&#34;,
+      &#34;role&#34;: &#34;assistant&#34;,
+      &#34;model&#34;: &#34;claude-3-sonnet-20240229&#34;,
+      &#34;content&#34;: [
+        {
+          &#34;type&#34;: &#34;text&#34;,
+          &#34;text&#34;: &#34;Perfect! As you can see, the `@repeat(3)` decorator successfully made the `greet` function execute three times, printing \&#34;Hello, Alice!\&#34; three times.\n\nThis demonstrates the power of parameterized decorators - you can customize their behavior by passing arguments to the decorator factory. Some common use cases include:\n\n- **Timing decorators**: `@time_it(units=&amp;apos;ms&amp;apos;)`\n- **Retry decorators**: `@retry(max_attempts=3, delay=1)`\n- **Authentication decorators**: `@require_role(&amp;apos;admin&amp;apos;)`\n- **Caching decorators**: `@cache(ttl=300)`\n\nThe pattern is always the same: decorator factory \u2192 decorator \u2192 wrapper function.&#34;
+        }
+      ],
+      &#34;stop_reason&#34;: &#34;end_turn&#34;,
+      &#34;stop_sequence&#34;: null,
+      &#34;usage&#34;: {
+        &#34;input_tokens&#34;: 45,
+        &#34;cache_creation_input_tokens&#34;: 0,
+        &#34;cache_read_input_tokens&#34;: 0,
+        &#34;output_tokens&#34;: 110,
+        &#34;service_tier&#34;: &#34;standard&#34;
+      }
+    }
+  }' data-copyable-text='Perfect! As you can see, the `@repeat(3)` decorator successfully made the `greet` function execute three times, printing &#34;Hello, Alice!&#34; three times.&amp;#10;&amp;#10;This demonstrates the power of parameterized decorators - you can customize their behavior by passing arguments to the decorator factory. Some common use cases include:&amp;#10;&amp;#10;- **Timing decorators**: `@time_it(units=&amp;apos;ms&amp;apos;)`&amp;#10;- **Retry decorators**: `@retry(max_attempts=3, delay=1)`&amp;#10;- **Authentication decorators**: `@require_role(&amp;apos;admin&amp;apos;)`&amp;#10;- **Caching decorators**: `@cache(ttl=300)`&amp;#10;&amp;#10;The pattern is always the same: decorator factory → decorator → wrapper function.'>
           <div class='header'>
               <span>🤖 Assistant</span>
               <div class='header-info'>
                   <div class='timestamp-row'>
                       <span class='timestamp' data-timestamp='2025-07-03T16:08:07.874907Z'>2025-07-03 16:08:07</span>
+                      
+                      <button class='copy-json-btn' data-message-id='d-12' title='Copy message content'>📋</button>
+                      
                   </div>
                   
                   <span class='token-usage'>Input: 45 | Output: 110</span>
@@ -14693,12 +15957,34 @@
       
       
       
-      <div class='message user session-test_session' data-message-id='d-13' id='msg-d-13'>
+      <div class='message user session-test_session' data-message-id='d-13' id='msg-d-13' data-raw-json='{
+    &#34;type&#34;: &#34;user&#34;,
+    &#34;timestamp&#34;: &#34;2025-07-03T16:10:07.874907Z&#34;,
+    &#34;parentUuid&#34;: null,
+    &#34;isSidechain&#34;: false,
+    &#34;userType&#34;: &#34;human&#34;,
+    &#34;cwd&#34;: &#34;/tmp&#34;,
+    &#34;sessionId&#34;: &#34;test_session&#34;,
+    &#34;version&#34;: &#34;1.0.0&#34;,
+    &#34;uuid&#34;: &#34;msg_011&#34;,
+    &#34;message&#34;: {
+      &#34;role&#34;: &#34;user&#34;,
+      &#34;content&#34;: [
+        {
+          &#34;type&#34;: &#34;text&#34;,
+          &#34;text&#34;: &#34;This is really helpful! Let me try to implement a timing decorator myself. Can you help me if I get stuck?&#34;
+        }
+      ]
+    }
+  }' data-copyable-text='This is really helpful! Let me try to implement a timing decorator myself. Can you help me if I get stuck?'>
           <div class='header'>
               <span>🤷 User</span>
               <div class='header-info'>
                   <div class='timestamp-row'>
                       <span class='timestamp' data-timestamp='2025-07-03T16:10:07.874907Z'>2025-07-03 16:10:07</span>
+                      
+                      <button class='copy-json-btn' data-message-id='d-13' title='Copy message content'>📋</button>
+                      
                   </div>
                   
               </div>
@@ -14724,6 +16010,62 @@
               const selectNoneButton = document.getElementById('selectNone');
               const closeToolbarButton = document.getElementById('closeToolbar');
               const filterToggles = document.querySelectorAll('.filter-toggle');
+  
+              // Copy message content functionality
+              function copyJsonToClipboard(button) {
+                  const messageId = button.getAttribute('data-message-id');
+                  const messageDiv = document.getElementById('msg-' + messageId) ||
+                                     document.getElementById('msg-' + messageId + '-first') ||
+                                     document.getElementById('msg-' + messageId + '-last');
+  
+                  if (!messageDiv) {
+                      console.error('Message div not found for ID:', messageId);
+                      return;
+                  }
+  
+                  const copyableText = messageDiv.getAttribute('data-copyable-text');
+                  if (!copyableText) {
+                      console.error('No copyable text found for message:', messageId);
+                      return;
+                  }
+  
+                  // Decode HTML entities safely using DOMParser
+                  const parser = new DOMParser();
+                  const doc = parser.parseFromString(copyableText, 'text/html');
+                  const decodedText = doc.documentElement.textContent || '';
+  
+                  // Copy to clipboard
+                  navigator.clipboard.writeText(decodedText).then(function() {
+                      // Visual feedback
+                      const originalText = button.textContent;
+                      button.textContent = '✓';
+                      button.style.color = '#4caf50';
+  
+                      setTimeout(function() {
+                          button.textContent = originalText;
+                          button.style.color = '';
+                      }, 2000);
+                  }).catch(function(err) {
+                      console.error('Failed to copy:', err);
+                      // Fallback feedback
+                      const originalText = button.textContent;
+                      button.textContent = '✗';
+                      button.style.color = '#f44336';
+  
+                      setTimeout(function() {
+                          button.textContent = originalText;
+                          button.style.color = '';
+                      }, 2000);
+                  });
+              }
+  
+              // Attach copy button event listeners
+              document.querySelectorAll('.copy-json-btn').forEach(function(button) {
+                  button.addEventListener('click', function(e) {
+                      e.stopPropagation();
+                      copyJsonToClipboard(button);
+                  });
+              });
   
               // Timezone conversion (included as component)
               // Convert timestamps to user's timezone
@@ -16664,7 +18006,31 @@
   .timestamp-row {
       display: flex;
       flex-direction: row;
-      align-items: normal;
+      align-items: center;
+      gap: 0.5em;
+  }
+  
+  /* Copy JSON button styling */
+  .copy-json-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1em;
+      padding: 0.2em 0.4em;
+      border-radius: 3px;
+      transition: all 0.2s ease;
+      opacity: 0.5;
+  }
+  
+  .copy-json-btn:hover {
+      opacity: 1;
+      background-color: var(--highlight-dimmed);
+      transform: scale(1.1);
+  }
+  
+  .copy-json-btn:active {
+      transform: scale(0.95);
+  }
       gap: 8px;
   }
   
@@ -19122,12 +20488,34 @@
       
       
       
-      <div class='message user session-test_session' data-message-id='d-0' id='msg-d-0'>
+      <div class='message user session-test_session' data-message-id='d-0' id='msg-d-0' data-raw-json='{
+    &#34;type&#34;: &#34;user&#34;,
+    &#34;timestamp&#34;: &#34;2025-07-03T15:50:07.874907Z&#34;,
+    &#34;parentUuid&#34;: null,
+    &#34;isSidechain&#34;: false,
+    &#34;userType&#34;: &#34;human&#34;,
+    &#34;cwd&#34;: &#34;/tmp&#34;,
+    &#34;sessionId&#34;: &#34;test_session&#34;,
+    &#34;version&#34;: &#34;1.0.0&#34;,
+    &#34;uuid&#34;: &#34;msg_001&#34;,
+    &#34;message&#34;: {
+      &#34;role&#34;: &#34;user&#34;,
+      &#34;content&#34;: [
+        {
+          &#34;type&#34;: &#34;text&#34;,
+          &#34;text&#34;: &#34;Hello Claude! Can you help me understand how Python decorators work?&#34;
+        }
+      ]
+    }
+  }' data-copyable-text='Hello Claude! Can you help me understand how Python decorators work?'>
           <div class='header'>
               <span>🤷 User</span>
               <div class='header-info'>
                   <div class='timestamp-row'>
                       <span class='timestamp' data-timestamp='2025-07-03T15:50:07.874907Z'>2025-07-03 15:50:07</span>
+                      
+                      <button class='copy-json-btn' data-message-id='d-0' title='Copy message content'>📋</button>
+                      
                   </div>
                   
               </div>
@@ -19149,12 +20537,47 @@
       
       
       
-      <div class='message assistant session-test_session d-0' data-message-id='d-1' id='msg-d-1'>
+      <div class='message assistant session-test_session d-0' data-message-id='d-1' id='msg-d-1' data-raw-json='{
+    &#34;type&#34;: &#34;assistant&#34;,
+    &#34;timestamp&#34;: &#34;2025-07-03T15:52:07.874907Z&#34;,
+    &#34;parentUuid&#34;: null,
+    &#34;isSidechain&#34;: false,
+    &#34;userType&#34;: &#34;human&#34;,
+    &#34;cwd&#34;: &#34;/tmp&#34;,
+    &#34;sessionId&#34;: &#34;test_session&#34;,
+    &#34;version&#34;: &#34;1.0.0&#34;,
+    &#34;uuid&#34;: &#34;msg_002&#34;,
+    &#34;requestId&#34;: &#34;req_001&#34;,
+    &#34;message&#34;: {
+      &#34;id&#34;: &#34;msg_002&#34;,
+      &#34;type&#34;: &#34;message&#34;,
+      &#34;role&#34;: &#34;assistant&#34;,
+      &#34;model&#34;: &#34;claude-3-sonnet-20240229&#34;,
+      &#34;content&#34;: [
+        {
+          &#34;type&#34;: &#34;text&#34;,
+          &#34;text&#34;: &#34;I&amp;apos;d be happy to help you understand Python decorators! A decorator is a design pattern that allows you to modify or extend the behavior of functions or classes without permanently modifying their code.\n\nHere&amp;apos;s a simple example:\n\n```python\ndef my_decorator(func):\n    def wrapper():\n        print(\&#34;Something before the function\&#34;)\n        func()\n        print(\&#34;Something after the function\&#34;)\n    return wrapper\n\n@my_decorator\ndef say_hello():\n    print(\&#34;Hello!\&#34;)\n\nsay_hello()\n```\n\nThis will output:\n```\nSomething before the function\nHello!\nSomething after the function\n```&#34;
+        }
+      ],
+      &#34;stop_reason&#34;: &#34;end_turn&#34;,
+      &#34;stop_sequence&#34;: null,
+      &#34;usage&#34;: {
+        &#34;input_tokens&#34;: 25,
+        &#34;cache_creation_input_tokens&#34;: 0,
+        &#34;cache_read_input_tokens&#34;: 0,
+        &#34;output_tokens&#34;: 120,
+        &#34;service_tier&#34;: &#34;standard&#34;
+      }
+    }
+  }' data-copyable-text='I&amp;apos;d be happy to help you understand Python decorators! A decorator is a design pattern that allows you to modify or extend the behavior of functions or classes without permanently modifying their code.&amp;#10;&amp;#10;Here&amp;apos;s a simple example:&amp;#10;&amp;#10;```python&amp;#10;def my_decorator(func):&amp;#10;    def wrapper():&amp;#10;        print(&#34;Something before the function&#34;)&amp;#10;        func()&amp;#10;        print(&#34;Something after the function&#34;)&amp;#10;    return wrapper&amp;#10;&amp;#10;@my_decorator&amp;#10;def say_hello():&amp;#10;    print(&#34;Hello!&#34;)&amp;#10;&amp;#10;say_hello()&amp;#10;```&amp;#10;&amp;#10;This will output:&amp;#10;```&amp;#10;Something before the function&amp;#10;Hello!&amp;#10;Something after the function&amp;#10;```'>
           <div class='header'>
               <span>🤖 Assistant</span>
               <div class='header-info'>
                   <div class='timestamp-row'>
                       <span class='timestamp' data-timestamp='2025-07-03T15:52:07.874907Z'>2025-07-03 15:52:07</span>
+                      
+                      <button class='copy-json-btn' data-message-id='d-1' title='Copy message content'>📋</button>
+                      
                   </div>
                   
                   <span class='token-usage'>Input: 25 | Output: 120</span>
@@ -19188,12 +20611,34 @@
       
       
       
-      <div class='message user session-test_session' data-message-id='d-2' id='msg-d-2'>
+      <div class='message user session-test_session' data-message-id='d-2' id='msg-d-2' data-raw-json='{
+    &#34;type&#34;: &#34;user&#34;,
+    &#34;timestamp&#34;: &#34;2025-07-03T15:54:07.874907Z&#34;,
+    &#34;parentUuid&#34;: null,
+    &#34;isSidechain&#34;: false,
+    &#34;userType&#34;: &#34;human&#34;,
+    &#34;cwd&#34;: &#34;/tmp&#34;,
+    &#34;sessionId&#34;: &#34;test_session&#34;,
+    &#34;version&#34;: &#34;1.0.0&#34;,
+    &#34;uuid&#34;: &#34;msg_003&#34;,
+    &#34;message&#34;: {
+      &#34;role&#34;: &#34;user&#34;,
+      &#34;content&#34;: [
+        {
+          &#34;type&#34;: &#34;text&#34;,
+          &#34;text&#34;: &#34;Great! Can you also show me how to create a decorator that takes parameters?&#34;
+        }
+      ]
+    }
+  }' data-copyable-text='Great! Can you also show me how to create a decorator that takes parameters?'>
           <div class='header'>
               <span>🤷 User</span>
               <div class='header-info'>
                   <div class='timestamp-row'>
                       <span class='timestamp' data-timestamp='2025-07-03T15:54:07.874907Z'>2025-07-03 15:54:07</span>
+                      
+                      <button class='copy-json-btn' data-message-id='d-2' title='Copy message content'>📋</button>
+                      
                   </div>
                   
               </div>
@@ -19215,12 +20660,51 @@
       
       
       
-      <div class='message tool_use paired-message pair_first session-test_session d-2' data-message-id='d-3' id='msg-d-3-first'>
+      <div class='message tool_use paired-message pair_first session-test_session d-2' data-message-id='d-3' id='msg-d-3-first' data-raw-json='{
+    &#34;type&#34;: &#34;assistant&#34;,
+    &#34;timestamp&#34;: &#34;2025-07-03T15:56:07.874907Z&#34;,
+    &#34;parentUuid&#34;: null,
+    &#34;isSidechain&#34;: false,
+    &#34;userType&#34;: &#34;human&#34;,
+    &#34;cwd&#34;: &#34;/tmp&#34;,
+    &#34;sessionId&#34;: &#34;test_session&#34;,
+    &#34;version&#34;: &#34;1.0.0&#34;,
+    &#34;uuid&#34;: &#34;msg_004&#34;,
+    &#34;requestId&#34;: &#34;req_002&#34;,
+    &#34;message&#34;: {
+      &#34;id&#34;: &#34;msg_004&#34;,
+      &#34;type&#34;: &#34;message&#34;,
+      &#34;role&#34;: &#34;assistant&#34;,
+      &#34;model&#34;: &#34;claude-3-sonnet-20240229&#34;,
+      &#34;content&#34;: [
+        {
+          &#34;type&#34;: &#34;tool_use&#34;,
+          &#34;id&#34;: &#34;tool_001&#34;,
+          &#34;name&#34;: &#34;Edit&#34;,
+          &#34;input&#34;: {
+            &#34;file_path&#34;: &#34;/tmp/decorator_example.py&#34;,
+            &#34;old_string&#34;: &#34;&#34;,
+            &#34;new_string&#34;: &#34;def repeat(times):\n    def decorator(func):\n        def wrapper(*args, **kwargs):\n            for _ in range(times):\n                result = func(*args, **kwargs)\n            return result\n        return wrapper\n    return decorator\n\n@repeat(3)\ndef greet(name):\n    print(f\&#34;Hello, {name}!\&#34;)\n\ngreet(\&#34;Alice\&#34;)&#34;
+          }
+        }
+      ],
+      &#34;stop_reason&#34;: &#34;tool_use&#34;,
+      &#34;stop_sequence&#34;: null,
+      &#34;usage&#34;: {
+        &#34;input_tokens&#34;: 45,
+        &#34;cache_creation_input_tokens&#34;: 0,
+        &#34;cache_read_input_tokens&#34;: 0,
+        &#34;output_tokens&#34;: 85,
+        &#34;service_tier&#34;: &#34;standard&#34;
+      }
+    }
+  }'>
           <div class='header'>
               <span title="ID: tool_001">📝 Edit <span class='tool-summary'>/tmp/decorator_example.py</span></span>
               <div class='header-info'>
                   <div class='timestamp-row'>
                       <span class='timestamp' data-timestamp='2025-07-03T15:56:07.874907Z'>2025-07-03 15:56:07</span>
+                      
                   </div>
                   
               </div>
@@ -19232,12 +20716,37 @@
       
       
       
-      <div class='message tool_result paired-message pair_last session-test_session d-2' data-message-id='d-4' id='msg-d-4-last'>
+      <div class='message tool_result paired-message pair_last session-test_session d-2' data-message-id='d-4' id='msg-d-4-last' data-raw-json='{
+    &#34;type&#34;: &#34;user&#34;,
+    &#34;timestamp&#34;: &#34;2025-07-03T15:58:07.874907Z&#34;,
+    &#34;parentUuid&#34;: null,
+    &#34;isSidechain&#34;: false,
+    &#34;userType&#34;: &#34;human&#34;,
+    &#34;cwd&#34;: &#34;/tmp&#34;,
+    &#34;sessionId&#34;: &#34;test_session&#34;,
+    &#34;version&#34;: &#34;1.0.0&#34;,
+    &#34;uuid&#34;: &#34;msg_005&#34;,
+    &#34;toolUseResult&#34;: &#34;File created successfully at: /tmp/decorator_example.py&#34;,
+    &#34;message&#34;: {
+      &#34;role&#34;: &#34;user&#34;,
+      &#34;content&#34;: [
+        {
+          &#34;type&#34;: &#34;tool_result&#34;,
+          &#34;tool_use_id&#34;: &#34;tool_001&#34;,
+          &#34;content&#34;: &#34;File created successfully at: /tmp/decorator_example.py&#34;,
+          &#34;is_error&#34;: false
+        }
+      ]
+    }
+  }' data-copyable-text='File created successfully at: /tmp/decorator_example.py'>
           <div class='header'>
               <span title="ID: tool_001"></span>
               <div class='header-info'>
                   <div class='timestamp-row'>
                       <span class='timestamp' data-timestamp='2025-07-03T15:58:07.874907Z' data-duration='took 2m 0s'>2025-07-03 15:58:07</span>
+                      
+                      <button class='copy-json-btn' data-message-id='d-4' title='Copy message content'>📋</button>
+                      
                   </div>
                   
               </div>
@@ -19249,12 +20758,47 @@
       
       
       
-      <div class='message assistant session-test_session d-2' data-message-id='d-5' id='msg-d-5'>
+      <div class='message assistant session-test_session d-2' data-message-id='d-5' id='msg-d-5' data-raw-json='{
+    &#34;type&#34;: &#34;assistant&#34;,
+    &#34;timestamp&#34;: &#34;2025-07-03T16:00:07.874907Z&#34;,
+    &#34;parentUuid&#34;: null,
+    &#34;isSidechain&#34;: false,
+    &#34;userType&#34;: &#34;human&#34;,
+    &#34;cwd&#34;: &#34;/tmp&#34;,
+    &#34;sessionId&#34;: &#34;test_session&#34;,
+    &#34;version&#34;: &#34;1.0.0&#34;,
+    &#34;uuid&#34;: &#34;msg_006&#34;,
+    &#34;requestId&#34;: &#34;req_003&#34;,
+    &#34;message&#34;: {
+      &#34;id&#34;: &#34;msg_006&#34;,
+      &#34;type&#34;: &#34;message&#34;,
+      &#34;role&#34;: &#34;assistant&#34;,
+      &#34;model&#34;: &#34;claude-3-sonnet-20240229&#34;,
+      &#34;content&#34;: [
+        {
+          &#34;type&#34;: &#34;text&#34;,
+          &#34;text&#34;: &#34;Perfect! I&amp;apos;ve created an example of a parameterized decorator. Here&amp;apos;s how it works:\n\n1. **`repeat(times)`** - This is the decorator factory that takes parameters\n2. **`decorator(func)`** - This is the actual decorator that gets returned\n3. **`wrapper(*args, **kwargs)`** - This is the wrapper function that does the work\n\nThe key insight is that we have **three levels of functions**:\n- The outermost function takes the decorator parameters\n- The middle function takes the function to be decorated\n- The innermost function is the actual wrapper that gets called\n\nWhen you run this code, it will print \&#34;Hello, Alice!\&#34; three times.&#34;
+        }
+      ],
+      &#34;stop_reason&#34;: &#34;end_turn&#34;,
+      &#34;stop_sequence&#34;: null,
+      &#34;usage&#34;: {
+        &#34;input_tokens&#34;: 78,
+        &#34;cache_creation_input_tokens&#34;: 0,
+        &#34;cache_read_input_tokens&#34;: 0,
+        &#34;output_tokens&#34;: 95,
+        &#34;service_tier&#34;: &#34;standard&#34;
+      }
+    }
+  }' data-copyable-text='Perfect! I&amp;apos;ve created an example of a parameterized decorator. Here&amp;apos;s how it works:&amp;#10;&amp;#10;1. **`repeat(times)`** - This is the decorator factory that takes parameters&amp;#10;2. **`decorator(func)`** - This is the actual decorator that gets returned&amp;#10;3. **`wrapper(*args, **kwargs)`** - This is the wrapper function that does the work&amp;#10;&amp;#10;The key insight is that we have **three levels of functions**:&amp;#10;- The outermost function takes the decorator parameters&amp;#10;- The middle function takes the function to be decorated&amp;#10;- The innermost function is the actual wrapper that gets called&amp;#10;&amp;#10;When you run this code, it will print &#34;Hello, Alice!&#34; three times.'>
           <div class='header'>
               <span>🤖 Assistant</span>
               <div class='header-info'>
                   <div class='timestamp-row'>
                       <span class='timestamp' data-timestamp='2025-07-03T16:00:07.874907Z'>2025-07-03 16:00:07</span>
+                      
+                      <button class='copy-json-btn' data-message-id='d-5' title='Copy message content'>📋</button>
+                      
                   </div>
                   
                   <span class='token-usage'>Input: 78 | Output: 95</span>
@@ -19281,12 +20825,34 @@
       
       
       
-      <div class='message user session-test_session' data-message-id='d-6' id='msg-d-6'>
+      <div class='message user session-test_session' data-message-id='d-6' id='msg-d-6' data-raw-json='{
+    &#34;type&#34;: &#34;user&#34;,
+    &#34;timestamp&#34;: &#34;2025-07-03T16:02:07.874907Z&#34;,
+    &#34;parentUuid&#34;: null,
+    &#34;isSidechain&#34;: false,
+    &#34;userType&#34;: &#34;human&#34;,
+    &#34;cwd&#34;: &#34;/tmp&#34;,
+    &#34;sessionId&#34;: &#34;test_session&#34;,
+    &#34;version&#34;: &#34;1.0.0&#34;,
+    &#34;uuid&#34;: &#34;msg_007&#34;,
+    &#34;message&#34;: {
+      &#34;role&#34;: &#34;user&#34;,
+      &#34;content&#34;: [
+        {
+          &#34;type&#34;: &#34;text&#34;,
+          &#34;text&#34;: &#34;Can you run that example to show the output?&#34;
+        }
+      ]
+    }
+  }' data-copyable-text='Can you run that example to show the output?'>
           <div class='header'>
               <span>🤷 User</span>
               <div class='header-info'>
                   <div class='timestamp-row'>
                       <span class='timestamp' data-timestamp='2025-07-03T16:02:07.874907Z'>2025-07-03 16:02:07</span>
+                      
+                      <button class='copy-json-btn' data-message-id='d-6' title='Copy message content'>📋</button>
+                      
                   </div>
                   
               </div>
@@ -19308,12 +20874,50 @@
       
       
       
-      <div class='message tool_use paired-message pair_first session-test_session d-6' data-message-id='d-7' id='msg-d-7-first'>
+      <div class='message tool_use paired-message pair_first session-test_session d-6' data-message-id='d-7' id='msg-d-7-first' data-raw-json='{
+    &#34;type&#34;: &#34;assistant&#34;,
+    &#34;timestamp&#34;: &#34;2025-07-03T16:04:07.874907Z&#34;,
+    &#34;parentUuid&#34;: null,
+    &#34;isSidechain&#34;: false,
+    &#34;userType&#34;: &#34;human&#34;,
+    &#34;cwd&#34;: &#34;/tmp&#34;,
+    &#34;sessionId&#34;: &#34;test_session&#34;,
+    &#34;version&#34;: &#34;1.0.0&#34;,
+    &#34;uuid&#34;: &#34;msg_008&#34;,
+    &#34;requestId&#34;: &#34;req_004&#34;,
+    &#34;message&#34;: {
+      &#34;id&#34;: &#34;msg_008&#34;,
+      &#34;type&#34;: &#34;message&#34;,
+      &#34;role&#34;: &#34;assistant&#34;,
+      &#34;model&#34;: &#34;claude-3-sonnet-20240229&#34;,
+      &#34;content&#34;: [
+        {
+          &#34;type&#34;: &#34;tool_use&#34;,
+          &#34;id&#34;: &#34;tool_002&#34;,
+          &#34;name&#34;: &#34;Bash&#34;,
+          &#34;input&#34;: {
+            &#34;command&#34;: &#34;python /tmp/decorator_example.py&#34;,
+            &#34;description&#34;: &#34;Run the decorator example to show output&#34;
+          }
+        }
+      ],
+      &#34;stop_reason&#34;: &#34;tool_use&#34;,
+      &#34;stop_sequence&#34;: null,
+      &#34;usage&#34;: {
+        &#34;input_tokens&#34;: 25,
+        &#34;cache_creation_input_tokens&#34;: 0,
+        &#34;cache_read_input_tokens&#34;: 0,
+        &#34;output_tokens&#34;: 35,
+        &#34;service_tier&#34;: &#34;standard&#34;
+      }
+    }
+  }'>
           <div class='header'>
               <span title="ID: tool_002">🛠️ Bash <span class='tool-summary'>Run the decorator example to show output</span></span>
               <div class='header-info'>
                   <div class='timestamp-row'>
                       <span class='timestamp' data-timestamp='2025-07-03T16:04:07.874907Z'>2025-07-03 16:04:07</span>
+                      
                   </div>
                   
               </div>
@@ -19325,12 +20929,37 @@
       
       
       
-      <div class='message tool_result paired-message pair_last session-test_session d-6' data-message-id='d-8' id='msg-d-8-last'>
+      <div class='message tool_result paired-message pair_last session-test_session d-6' data-message-id='d-8' id='msg-d-8-last' data-raw-json='{
+    &#34;type&#34;: &#34;user&#34;,
+    &#34;timestamp&#34;: &#34;2025-07-03T16:06:07.874907Z&#34;,
+    &#34;parentUuid&#34;: null,
+    &#34;isSidechain&#34;: false,
+    &#34;userType&#34;: &#34;human&#34;,
+    &#34;cwd&#34;: &#34;/tmp&#34;,
+    &#34;sessionId&#34;: &#34;test_session&#34;,
+    &#34;version&#34;: &#34;1.0.0&#34;,
+    &#34;uuid&#34;: &#34;msg_009&#34;,
+    &#34;toolUseResult&#34;: &#34;Hello, Alice!\nHello, Alice!\nHello, Alice!&#34;,
+    &#34;message&#34;: {
+      &#34;role&#34;: &#34;user&#34;,
+      &#34;content&#34;: [
+        {
+          &#34;type&#34;: &#34;tool_result&#34;,
+          &#34;tool_use_id&#34;: &#34;tool_002&#34;,
+          &#34;content&#34;: &#34;Hello, Alice!\nHello, Alice!\nHello, Alice!&#34;,
+          &#34;is_error&#34;: false
+        }
+      ]
+    }
+  }' data-copyable-text='Hello, Alice!&amp;#10;Hello, Alice!&amp;#10;Hello, Alice!'>
           <div class='header'>
               <span title="ID: tool_002"></span>
               <div class='header-info'>
                   <div class='timestamp-row'>
                       <span class='timestamp' data-timestamp='2025-07-03T16:06:07.874907Z' data-duration='took 2m 0s'>2025-07-03 16:06:07</span>
+                      
+                      <button class='copy-json-btn' data-message-id='d-8' title='Copy message content'>📋</button>
+                      
                   </div>
                   
               </div>
@@ -19344,12 +20973,47 @@
       
       
       
-      <div class='message assistant session-test_session d-6' data-message-id='d-9' id='msg-d-9'>
+      <div class='message assistant session-test_session d-6' data-message-id='d-9' id='msg-d-9' data-raw-json='{
+    &#34;type&#34;: &#34;assistant&#34;,
+    &#34;timestamp&#34;: &#34;2025-07-03T16:08:07.874907Z&#34;,
+    &#34;parentUuid&#34;: null,
+    &#34;isSidechain&#34;: false,
+    &#34;userType&#34;: &#34;human&#34;,
+    &#34;cwd&#34;: &#34;/tmp&#34;,
+    &#34;sessionId&#34;: &#34;test_session&#34;,
+    &#34;version&#34;: &#34;1.0.0&#34;,
+    &#34;uuid&#34;: &#34;msg_010&#34;,
+    &#34;requestId&#34;: &#34;req_005&#34;,
+    &#34;message&#34;: {
+      &#34;id&#34;: &#34;msg_010&#34;,
+      &#34;type&#34;: &#34;message&#34;,
+      &#34;role&#34;: &#34;assistant&#34;,
+      &#34;model&#34;: &#34;claude-3-sonnet-20240229&#34;,
+      &#34;content&#34;: [
+        {
+          &#34;type&#34;: &#34;text&#34;,
+          &#34;text&#34;: &#34;Perfect! As you can see, the `@repeat(3)` decorator successfully made the `greet` function execute three times, printing \&#34;Hello, Alice!\&#34; three times.\n\nThis demonstrates the power of parameterized decorators - you can customize their behavior by passing arguments to the decorator factory. Some common use cases include:\n\n- **Timing decorators**: `@time_it(units=&amp;apos;ms&amp;apos;)`\n- **Retry decorators**: `@retry(max_attempts=3, delay=1)`\n- **Authentication decorators**: `@require_role(&amp;apos;admin&amp;apos;)`\n- **Caching decorators**: `@cache(ttl=300)`\n\nThe pattern is always the same: decorator factory \u2192 decorator \u2192 wrapper function.&#34;
+        }
+      ],
+      &#34;stop_reason&#34;: &#34;end_turn&#34;,
+      &#34;stop_sequence&#34;: null,
+      &#34;usage&#34;: {
+        &#34;input_tokens&#34;: 45,
+        &#34;cache_creation_input_tokens&#34;: 0,
+        &#34;cache_read_input_tokens&#34;: 0,
+        &#34;output_tokens&#34;: 110,
+        &#34;service_tier&#34;: &#34;standard&#34;
+      }
+    }
+  }' data-copyable-text='Perfect! As you can see, the `@repeat(3)` decorator successfully made the `greet` function execute three times, printing &#34;Hello, Alice!&#34; three times.&amp;#10;&amp;#10;This demonstrates the power of parameterized decorators - you can customize their behavior by passing arguments to the decorator factory. Some common use cases include:&amp;#10;&amp;#10;- **Timing decorators**: `@time_it(units=&amp;apos;ms&amp;apos;)`&amp;#10;- **Retry decorators**: `@retry(max_attempts=3, delay=1)`&amp;#10;- **Authentication decorators**: `@require_role(&amp;apos;admin&amp;apos;)`&amp;#10;- **Caching decorators**: `@cache(ttl=300)`&amp;#10;&amp;#10;The pattern is always the same: decorator factory → decorator → wrapper function.'>
           <div class='header'>
               <span>🤖 Assistant</span>
               <div class='header-info'>
                   <div class='timestamp-row'>
                       <span class='timestamp' data-timestamp='2025-07-03T16:08:07.874907Z'>2025-07-03 16:08:07</span>
+                      
+                      <button class='copy-json-btn' data-message-id='d-9' title='Copy message content'>📋</button>
+                      
                   </div>
                   
                   <span class='token-usage'>Input: 45 | Output: 110</span>
@@ -19372,12 +21036,34 @@
       
       
       
-      <div class='message user session-test_session' data-message-id='d-10' id='msg-d-10'>
+      <div class='message user session-test_session' data-message-id='d-10' id='msg-d-10' data-raw-json='{
+    &#34;type&#34;: &#34;user&#34;,
+    &#34;timestamp&#34;: &#34;2025-07-03T16:10:07.874907Z&#34;,
+    &#34;parentUuid&#34;: null,
+    &#34;isSidechain&#34;: false,
+    &#34;userType&#34;: &#34;human&#34;,
+    &#34;cwd&#34;: &#34;/tmp&#34;,
+    &#34;sessionId&#34;: &#34;test_session&#34;,
+    &#34;version&#34;: &#34;1.0.0&#34;,
+    &#34;uuid&#34;: &#34;msg_011&#34;,
+    &#34;message&#34;: {
+      &#34;role&#34;: &#34;user&#34;,
+      &#34;content&#34;: [
+        {
+          &#34;type&#34;: &#34;text&#34;,
+          &#34;text&#34;: &#34;This is really helpful! Let me try to implement a timing decorator myself. Can you help me if I get stuck?&#34;
+        }
+      ]
+    }
+  }' data-copyable-text='This is really helpful! Let me try to implement a timing decorator myself. Can you help me if I get stuck?'>
           <div class='header'>
               <span>🤷 User</span>
               <div class='header-info'>
                   <div class='timestamp-row'>
                       <span class='timestamp' data-timestamp='2025-07-03T16:10:07.874907Z'>2025-07-03 16:10:07</span>
+                      
+                      <button class='copy-json-btn' data-message-id='d-10' title='Copy message content'>📋</button>
+                      
                   </div>
                   
               </div>
@@ -19403,6 +21089,62 @@
               const selectNoneButton = document.getElementById('selectNone');
               const closeToolbarButton = document.getElementById('closeToolbar');
               const filterToggles = document.querySelectorAll('.filter-toggle');
+  
+              // Copy message content functionality
+              function copyJsonToClipboard(button) {
+                  const messageId = button.getAttribute('data-message-id');
+                  const messageDiv = document.getElementById('msg-' + messageId) ||
+                                     document.getElementById('msg-' + messageId + '-first') ||
+                                     document.getElementById('msg-' + messageId + '-last');
+  
+                  if (!messageDiv) {
+                      console.error('Message div not found for ID:', messageId);
+                      return;
+                  }
+  
+                  const copyableText = messageDiv.getAttribute('data-copyable-text');
+                  if (!copyableText) {
+                      console.error('No copyable text found for message:', messageId);
+                      return;
+                  }
+  
+                  // Decode HTML entities safely using DOMParser
+                  const parser = new DOMParser();
+                  const doc = parser.parseFromString(copyableText, 'text/html');
+                  const decodedText = doc.documentElement.textContent || '';
+  
+                  // Copy to clipboard
+                  navigator.clipboard.writeText(decodedText).then(function() {
+                      // Visual feedback
+                      const originalText = button.textContent;
+                      button.textContent = '✓';
+                      button.style.color = '#4caf50';
+  
+                      setTimeout(function() {
+                          button.textContent = originalText;
+                          button.style.color = '';
+                      }, 2000);
+                  }).catch(function(err) {
+                      console.error('Failed to copy:', err);
+                      // Fallback feedback
+                      const originalText = button.textContent;
+                      button.textContent = '✗';
+                      button.style.color = '#f44336';
+  
+                      setTimeout(function() {
+                          button.textContent = originalText;
+                          button.style.color = '';
+                      }, 2000);
+                  });
+              }
+  
+              // Attach copy button event listeners
+              document.querySelectorAll('.copy-json-btn').forEach(function(button) {
+                  button.addEventListener('click', function(e) {
+                      e.stopPropagation();
+                      copyJsonToClipboard(button);
+                  });
+              });
   
               // Timezone conversion (included as component)
               // Convert timestamps to user's timezone
