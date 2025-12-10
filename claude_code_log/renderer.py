@@ -3803,6 +3803,8 @@ def _process_messages_loop(
             pending_dedup: Optional[str] = (
                 None  # Holds task result content for deduplication
             )
+            # Track the converted content item for extracting copyable text
+            converted_item: ContentItem = tool_item
 
             if isinstance(tool_item, ToolUseContent) or item_type == "tool_use":
                 # Convert Anthropic type to our format if necessary
@@ -3815,6 +3817,8 @@ def _process_messages_loop(
                     )
                 else:
                     tool_use = tool_item
+
+                converted_item = tool_use
 
                 tool_content_html = format_tool_use_content(tool_use)
                 escaped_name = escape_html(tool_use.name)
@@ -3883,6 +3887,8 @@ def _process_messages_loop(
                 else:
                     tool_result_converted = tool_item
 
+                converted_item = tool_result_converted
+
                 # Get file_path and tool_name from tool_use context for specialized rendering
                 result_file_path: Optional[str] = None
                 result_tool_name: Optional[str] = None
@@ -3950,6 +3956,7 @@ def _process_messages_loop(
                 else:
                     thinking_converted = tool_item
 
+                converted_item = thinking_converted
                 tool_content_html = format_thinking_content(thinking_converted)
                 tool_message_type = "thinking"
                 tool_message_title = "Thinking"
@@ -3986,9 +3993,9 @@ def _process_messages_loop(
                 else f"{msg_uuid}-tool-{len(template_messages)}"
             )
 
-            # Extract copyable text from the tool item
+            # Extract copyable text from the converted content item
             tool_copyable_text = extract_copyable_text(
-                [tool_item], tool_message_type, message
+                [converted_item], tool_message_type, message
             )
 
             tool_template_message = TemplateMessage(
