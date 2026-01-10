@@ -391,8 +391,6 @@ def extract_copyable_text(
     parts: List[str] = []
 
     for item in content:
-        item_type = getattr(item, "type", None)
-
         if isinstance(item, TextContent):
             # Text content: return original markdown/text (strip ANSI codes)
             parts.append(_strip_ansi_codes(item.text))
