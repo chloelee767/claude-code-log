@@ -1268,6 +1268,7 @@ class SessionBrowser(App[Optional[str]]):
         Binding("M", "force_export_markdown", "Force Markdown", show=False),
         Binding("V", "force_view_markdown", "Force View", show=False),
         Binding("c", "resume_selected", "Resume in Claude Code"),
+        Binding("y", "copy_session_id", "Copy Session ID"),
         Binding("r", "restore_jsonl", "Restore JSONL"),
         Binding("d", "delete_session", "Delete Session"),
         Binding("e", "toggle_expanded", "Toggle Expanded View"),
@@ -1737,6 +1738,14 @@ class SessionBrowser(App[Optional[str]]):
         except Exception as e:
             self.notify(f"Error resuming session: {e}", severity="error")
 
+    def action_copy_session_id(self) -> None:
+        """Copy the selected session ID to clipboard."""
+        if not self.selected_session_id:
+            self.notify("No session selected", severity="warning")
+            return
+        self.copy_to_clipboard(self.selected_session_id)
+        self.notify(f"Session ID copied: {self.selected_session_id}")
+
     def _escape_rich_markup(self, text: str) -> str:
         """Escape Rich markup characters in text to prevent parsing errors."""
         if not text:
@@ -1916,6 +1925,7 @@ class SessionBrowser(App[Optional[str]]):
             "- m: Open selected session's Markdown file (in browser)\n"
             "- v: View Markdown in embedded viewer\n"
             "- c: Resume selected session in Claude Code\n"
+            "- y: Copy session ID to clipboard\n"
             "- p: Open project selector\n"
             "- q: Quit\n\n"
         )
